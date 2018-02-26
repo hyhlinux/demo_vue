@@ -1,0 +1,16 @@
+<div id="app">
+    {{ message }}
+    <p v-bind:title="message"> V-BIND</p>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+</script>

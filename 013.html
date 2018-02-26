@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <ul>
+        <li v-for="(game, index) in games"> {{ index+1 }}: {{ game.title }} {{ game.price }}</li>
+    </ul>
+
+    <ol v-for="(value, key) in myGames"> {{ key }}: {{ value }}</ol>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+             games: [
+                 { title: "勇者斗恶龙", price: 500},
+                 { title: "王者荣耀", price: 200},
+                 { title: "斗罗大地", price: 300},
+             ],
+             myGames: {
+                 title: "我的世界",
+                 price: "200",
+                 size: "20M",
+                 version: "v1.0",
+             },
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

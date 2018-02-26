@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <today-weather></today-weather>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component(
+        'today-weather', {
+            template: '<div> 今天下雨， 出不去啦，干嘛呢？ 看youtube</div>'
+        }
+    );
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

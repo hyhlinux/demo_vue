@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <h1>身世之迷</h1>
+    <div>
+        请输入您的名字：
+        <input v-model.lazy="myName">
+        <br>
+        请输入您的年龄：
+        <input v-model.lazy="myAge">
+        <br>
+        请选择您的地址：
+        <select v-model="address">
+            <option disabled value="">请选择</option>
+            <option >US</option>
+            <option >ZH</option>
+            <option >JP</option>
+        </select>
+        请选择您的语言：
+        <select v-model="address">
+            <option disabled value="">请选择</option>
+            <option >English</option>
+            <option >Chinese</option>
+            <option >Janpanes</option>
+        </select>
+    </div>
+    <hr>
+    <show-member-info :name="myName" :age="myAge" :detail="{ address: 'CH', language: 'zh'}">
+
+    </show-member-info>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component('show-member-info', {
+        props: {
+            name: {
+                type: String,
+                required: true,
+            },
+            age: {
+                type: Number,
+                validator: function (value) {
+                    return value >= 0 && value <= 130;
+                }
+            },
+            detail: {
+                type: Object,
+                default: function() {
+                    return {
+                        address: 'US',
+                        language: 'English',
+                    };
+                }
+            },
+        },
+        template: '<div>姓名：{{this.name}}<br/>'
+            + '年龄：{{this.age}}岁<br/>'
+            + '地址：{{this.detail.address}}<br/>'
+            + '语言：{{this.detail.language}} </div>',
+    });
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+             myName: "",
+             myAge: 0,
+             address: 'US',
+             language: 'English',
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

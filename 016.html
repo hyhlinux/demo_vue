@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<div id="myApp">
+    <h1>用户注册</h1>
+    <div>
+        <label for="userName">userName:</label>
+        <input type="text" id="userName" v-model.lazy="userName" @change="checkUserName">
+        <span v-if="checkUserNameOK">可注册</span>
+        <!--<span v-if="!checkUsernameOK">不可注册</span>-->
+    </div>
+    <div>
+        <label for="age">age:</label>
+        <input type="number" id="age" v-model.number="age">
+    </div>
+    <div>
+        <label for="content">descirbe:</label>
+        <textarea id="content" v-model.trim="content" cols="55" rows="8"></textarea>
+    </div>
+    <hr>
+    <div>
+        <h4>信息区</h4>
+        <p>姓名:{{ userName }}</p>
+        <p>年龄:{{ age }}</p>
+        <p><pre>简介:{{ content }}</pre></p>
+    </div>
+</div>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+             userName: "",
+             checkUserNameOK: false,
+             age: 20,
+             content: "",
+         },
+         methods: {
+             checkUserName: function () {
+                 if (this.userName.length > 0)
+                     this.checkUserNameOK = true;
+                 else
+                     this.checkUserNameOK = false;
+                 
+             }
+         },
+     });
+</script>
+</body>
+</html>

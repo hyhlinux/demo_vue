@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表格组件</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <h1>2017年度最新游戏:</h1>
+    <table border="1">
+        <tr>
+            <td>编号</td>
+            <td>游戏名称</td>
+        </tr>
+        <tr is="my-row1"></tr>
+        <tr is="my-row2"></tr>
+        <tr is="my-row3"></tr>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var myRow1 = {
+        template: '<tr><td>(1)</td><td>王者荣耀1</td></tr>'
+    };
+    var myRow2 = {
+        template: '<tr><td>(2)</td><td>王者荣耀2</td></tr>'
+    };
+    var myRow3 = {
+        template: '<tr><td>(3)</td><td>王者荣耀3</td></tr>'
+    };
+//    Vue.component(
+//        'today-weather', {
+//        }
+//    );
+    //局部组件，只作用与myApp
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+         },
+         components: {
+             'my-row1': myRow1,
+             'my-row2': myRow2,
+             'my-row3': myRow3,
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

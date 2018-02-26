@@ -2,7 +2,10 @@
     {{ message }}
     <p v-if="visiabled"  v-bind:title="message"> V-BIND</p>
     <ol>
-       <li v-for="todo in todos">{{ todo.text }}</li>
+       <li v-for="(todo, idx) in todos">{{idx}} --{{ todo.text }}</li>
+    </ol>
+    <ol>
+       <li v-for="(todo, idx) in people">{{idx}} --{{ todo.name }}</li>
     </ol>
     <button v-on:click="reverseMessage">逆转消息</button>
     <br>
@@ -22,7 +25,24 @@
                 { text: 'learn python' },
                 { text: 'learn js' },
                 { text: 'learn vue' },
-            ]
+            ],
+            people: [{
+                    name: 'Jack',
+                    age: 30,
+                    sex: 'Male'
+                }, {
+                    name: 'Bill',
+                    age: 26,
+                    sex: 'Male'
+                }, {
+                    name: 'Tracy',
+                    age: 22,
+                    sex: 'Female'
+                }, {
+                    name: 'Chris',
+                    age: 36,
+                    sex: 'Male'
+                }]
         },
         methods: {
             reverseMessage: function() {

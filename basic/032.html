@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slot插槽</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <nba-all-stars cc="奥尼尔" pf="加内特">
+        <span slot="sf">皮尔斯</span>
+        <span slot="sg">雷阿伦</span>
+        <span slot="pg">隆多</span>
+    </nba-all-stars>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component('nba-all-stars', {
+        props: ['cc', 'pf'],
+        template: '<div>'
+        + '<div>中锋: {{ cc }}</div>'
+        + '<div>前锋: {{ pf }}</div>'
+        + '<div> 小前: <slot name="sf"></slot></div>'
+        + '<div> 分卫: <slot name="sg"></slot></div>'
+        + '<div> 控卫: <slot name="pg"></slot></div>'
+        + '</div>',
+    });
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

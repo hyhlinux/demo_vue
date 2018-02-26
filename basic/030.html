@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>子组件向父组件传值</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <h2>人生加法</h2>
+    <add-method :a="6" :b="12" v-on:add_event="getAddResult"></add-method>
+    <hr>
+    <h2>{{ result }}</h2>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component('add-method', {
+        props: ['a', 'b'],
+        template:'<div><button v-on:click="add">+</button></div>',
+        methods: {
+            add: function () {
+                var value = 0;
+                value = this.a + this.b;
+                this.$emit('add_event', {result: value});
+            }
+        }
+    });
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+             result: 0,
+         },
+         methods: {
+             getAddResult: function (pval) {
+                this.result = pval.result;
+             }
+         },
+     });
+</script>
+</body>
+</html>

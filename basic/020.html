@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <div>今天的天气:
+        <today-weather></today-weather>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component(
+        'today-weather', {
+            template: '<strong>{{ todayWeather }}</strong>',
+            data: function () {
+                return {
+                    todayWeather: '雨'
+                }
+            }
+        }
+    );
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+         },
+         methods: {
+         },
+     });
+</script>
+</body>
+</html>

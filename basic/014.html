@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div id="myApp">
+    <h2>事件处理</h2>
+    <input id="txtName" @keyup="txtKeyup($event)">
+    <button id="btnOk" @click="btnClick($event)">Ok</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+     var myApp = new Vue({
+         el: '#myApp',
+         data: {
+         },
+         methods: {
+             txtKeyup: function (event) {
+                this.debugLog(event)
+             },
+             btnClick: function (event) {
+                 this.debugLog(event)
+             },
+             debugLog: function (event) {
+                console.log(
+                    event.srcElement.tagName,
+                    event.srcElement.id,
+                    event.srcElement.innerHTML,
+                    event.key? event.key:""
+                );
+             }
+         },
+     });
+</script>
+</body>
+</html>

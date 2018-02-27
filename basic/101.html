@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="../js/aurora-1.1.1.js"></script>
+    <link href="../home.css" rel="stylesheet"> </head>
+<body>
+
+<div id="myApp">
+ <!-- style为方便测试添加的样式-->
+<au-app style="border: 1px solid black;">
+  <au-header>
+    <h1 slot="logo">logo</h1>
+    <au-menu slot="content-left">
+      <au-menu-item href="#">左</au-menu-item>
+      <au-menu-item href="#">左</au-menu-item>
+      <au-menu-item href="#">左</au-menu-item>
+    </au-menu>
+    <au-menu slot="content-right">
+      <au-menu-item href="#">右</au-menu-item>
+      <au-menu-item href="#">右</au-menu-item>
+      <au-menu-item href="#">右</au-menu-item>
+    </au-menu>
+  </au-header>
+</au-app>
+</div>
+<script>
+    var myApp = new Vue({
+        el: '#myApp',
+    });
+</script>
+</body>
+
+</html>

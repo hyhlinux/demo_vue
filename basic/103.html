@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="../js/aurora-1.1.1.js"></script>
+    <link href="../styles/home.css" rel="stylesheet"> </head>
+<body>
+    <div id="myApp">
+        <!-- style为方便测试添加的样式-->
+        <au-app style="height: 1024px; border: 1px solid black;">
+            <au-header>
+                <h1 slot="logo">Home</h1>
+                <au-menu slot="content-left" :selected="mSelected">
+                    <au-menu-item v-for="menu in menus" :href="menu.href" :value="menu.value" @click="mSelected=menu.value">{{menu.name}}</au-menu-item>
+                </au-menu>
+            </au-header>
+            <au-content>
+                <div slot="sidebar">
+                    <au-menu :selected="mSelected">
+                        <au-menu-item v-for="menu in menus" :href="menu.href" :value="menu.value" @click="mSelected=menu.value">{{menu.name}}</au-menu-item>
+                    </au-menu>
+                </div>
+                <div slot="container">内容区域</div>
+            </au-content>
+        </au-app>
+    </div>
+    <script>
+    var menus = [{
+            href: '102.html',
+            name: '相册',
+            value: '1'
+        },
+        {
+            href: '102.html',
+            name: '看点',
+            value: '2'
+        },
+        {
+            href: '102.html',
+            name: 'y2b',
+            value: '3'
+        },
+        {
+            href: '102.html',
+            name: '股票',
+            value: '4'
+        },
+        {
+            href: '102.html',
+            name: '技术博客',
+            value: '5'
+        },
+        {
+            href: '102.html',
+            name: '技术资料',
+            value: '6'
+        }
+    ];
+    var myApp = new Vue({
+        el: '#myApp',
+        data: {
+            menus: menus,
+            mSelected: menus[1].value,
+        },
+    });
+    </script>
+</body></html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>09 props 单向传递</title>
+	 <link rel="stylesheet" href="../styles/demo.css" />
+</head>
+<body>
+	<div id="app">
+        <table>
+			<tr>
+				<th colspan="3">父组件数据</th>
+			</tr>
+			<tr>
+				<td>name</td>
+				<td>{{ people.name }}</td>
+				<td><input type="text" v-model="people.name"></td>
+			</tr>
+			<tr>
+				<td>age</td>
+				<td>{{ people.age }}</td>
+				<td><input type="text" v-model="people.age"></td>
+			</tr>
+		</table>
+		<br>
+		<my-component v-bind:cpeople="people"></my-component>
+	</div>
+	<template id="myComponent">
+        <table>
+			<tr>
+				<th colspan="3">子组件数据</th>
+			</tr>
+            <tr>
+				<td>myname</td>
+				<td>{{ name }}</td>
+                <td><input type="text" v-model="name"></td>
+			</tr>
+			<tr>
+				<td>myage</td>
+                <td>{{ age }}</td>
+				<td><input type="text" v-model="age"></td>
+			</tr>
+		</table>
+	</template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    people: {
+                name: 'hello',
+                age: 28,
+			},
+		},
+		components: {
+			'my-component': {
+				template: '#myComponent',
+				props: ['cpeople'],
+				data: function () {
+					return {
+					    name: this.cpeople.name,
+                        age: this.cpeople.age,
+					}
+                }
+			}
+		},
+	});
+</script>
+</html>

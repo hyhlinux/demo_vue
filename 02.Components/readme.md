@@ -70,6 +70,68 @@ camelCase的prop用于特性时，需要转为 kebab-case（短横线隔开）�
 <child-component v-bind:子组件prop="父组件数据属性"></child-component>
 ```
 
-#### 09 组件注册语法糖
-#### 05 组件注册语法糖
+#### 09 props 单向绑定
+```bash
+vue1.x
+修改了父组件的数据，同时影响了子组件。
+prop默认是单向绑定：当父组件的属性变化时，将传导给子组件，但是反过来不会。
+这是为了防止子组件无意修改了父组件的状态
+```
+
+#### 09-2/3 props 双向绑定
+```bash
+vue1.x .sync
+vue2.x v-bind:传递是引用时，修改是同一个对象
+```
+#### 09-4/5 props 单词绑定
+```bash
+<my-component v-bind:my-name.once="name" v-bind:my-age.once="age"></my-component>
+```
+组件中使用name, age 来自组件注册时的data
+```html
+<template id="myComponent">
+        <table>
+			<tr>
+				<th colspan="3">子组件数据</th>
+			</tr>
+            <tr>
+				<td>myname</td>
+				<td>{{ name }}</td>
+                <td><input type="text" v-model="name"></td>
+			</tr>
+			<tr>
+				<td>myage</td>
+                <td>{{ age }}</td>
+				<td><input type="text" v-model="age"></td>
+			</tr>
+		</table>
+</template>
+```
+
+组件data中的数据来源于props['cpeople'], data 只初始化一次，整个组件生命周期.
+```js
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    people: {
+                name: 'hello',
+                age: 28,
+			},
+		},
+		components: {
+			'my-component': {
+				template: '#myComponent',
+				props: ['cpeople'],
+				data: function () {
+					return {
+					    name: this.cpeople.name,
+                        age: this.cpeople.age,
+					}
+                }
+			}
+		},
+	});
+</script>
+```
 #### 05 组件注册语法糖

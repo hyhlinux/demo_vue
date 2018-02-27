@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>09 props 单向传递</title>
+	 <link rel="stylesheet" href="../styles/demo.css" />
+</head>
+<body>
+	<div id="app">
+        <table>
+			<tr>
+				<th colspan="3">父组件数据</th>
+			</tr>
+			<tr>
+				<td>name</td>
+				<td>{{ name }}</td>
+				<td><input type="text" v-model="name"></td>
+			</tr>
+			<tr>
+				<td>age</td>
+				<td>{{ age }}</td>
+				<td><input type="text" v-model="age"></td>
+			</tr>
+		</table>
+		<br>
+		<my-component v-bind:my-name="name" v-bind:my-age="age"></my-component>
+	</div>
+	<template id="myComponent">
+        <table>
+			<tr>
+				<th colspan="3">子组件数据</th>
+			</tr>
+            <tr>
+				<td>myname</td>
+				<td>{{ myName }}</td>
+                <td><input type="text" v-model="myName"></td>
+			</tr>
+			<tr>
+				<td>myage</td>
+                <td>{{ myAge }}</td>
+				<td><input type="text" v-model="myAge"></td>
+			</tr>
+		</table>
+	</template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			name: 'hello',
+			age: 28,
+		},
+		components: {
+			'my-component': {
+				template: '#myComponent',
+				props: ['myName', 'myAge']
+			}
+		},
+	});
+</script>
+</html>

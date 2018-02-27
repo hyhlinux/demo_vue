@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>08</title>
+	 <link rel="stylesheet" href="../styles/demo.css" />
+</head>
+<body>
+	<div id="app">
+		<!--3 #app 是Vue实例挂载的元素, 应该在挂载元素范围内使用组件-->
+		<my-component v-bind:my-name="name" v-bind:my-age="age"></my-component>
+	</div>
+	<template id="myComponent">
+        <table>
+			<tr>
+				<th colspan="2"> 子组件数据</th>
+			</tr>
+            <tr>
+				<td>name</td>
+				<td>{{myName}}</td>
+			</tr>
+			<tr>
+				<td>age</td>
+				<td>{{myAge}}</td>
+			</tr>
+		</table>
+	</template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			name: 'hello',
+			age: 28,
+		},
+		components: {
+			'my-component': {
+				template: '#myComponent',
+				props: ['myName', 'myAge']
+			}
+		},
+	});
+</script>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件和实例</title>
+</head>
+<body>
+	<div id="app1">
+		<!--3 #app 是Vue实例挂载的元素, 应该在挂载元素范围内使用组件-->
+		<my-component></my-component>
+	</div>
+	<div id="app2">
+		<my-component></my-component>
+	</div>
+	<div id="app3">
+        <!-- 没有对应的实例，组件无法解析 -->
+		<my-component></my-component>
+	</div>
+
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	// 1.创建一个组件构造器
+	var myComponent = Vue.extend({
+		template: '<div>This is my first component</div>'
+	});
+	// 2.注册组件，并指定组件标签
+	Vue.component('my-component', myComponent);
+	var app1 = new Vue({
+		el: '#app1'
+	});
+	var app2 = new Vue({
+		el: '#app2'
+	});
+</script>
+</html>

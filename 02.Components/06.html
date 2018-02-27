@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>first component</title>
+</head>
+<body>
+	<div id="app">
+		<!--3 #app 是Vue实例挂载的元素, 应该在挂载元素范围内使用组件-->
+		<my-component></my-component>
+	</div>
+	<script type="text/x-template" id="myComponent">
+		<div>This is my first component</div>
+	</script>
+
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	Vue.component('my-component', {
+		template: '#myComponent',
+	});
+	new Vue({
+		el: '#app'
+	});
+</script>
+</html>

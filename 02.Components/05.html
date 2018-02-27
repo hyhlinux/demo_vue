@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <my-component></my-component>
+</div>
+<hr>
+<div id="app2">
+    <my-component2></my-component2>
+    <my-component3></my-component3>
+</div>
+
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    // 使用Vue.component()直接创建和注册组件
+    Vue.component('my-component', {
+        template: '<div>This is the first component</div>'
+    });
+    var vm = new Vue({
+        el: '#app',
+    });
+    var vm2 = new Vue({
+        el: '#app2',
+        components: {
+            // 局部注册
+            'my-component2': {
+                template: '<div>This is the second component</div>'
+            },
+            'my-component3': {
+                template: '<div>This is the third component</div>'
+            },
+        },
+    });
+</script>
+</html>

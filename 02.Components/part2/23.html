@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./styles/demo.css" />
+</head>
+<body>
+	<div id="app">
+        <modal-dialog v-bind:show="show">
+            <header class="dialog-header" slot="header">
+                <h1 class="diaglog-title">提示信息</h1>
+            </header>
+            <div class="dialog-body" slot="body">
+                <p>你想在对话框中放什么内容都可以！</p>
+                <p>你可以放一段文字，也可以放一些表单，或者是一些图片。</p>
+            </div>
+            <footer class="dialog-footer" slot="footer">
+                <button class="btn" @click="closeDialog">关闭</button>
+            </footer>
+        </modal-dialog>
+        <button class="btn btn-open" @click="openDialog">打开对话框</button>
+	</div>
+    <template id="dialog-template">
+        <div class="dialogs">
+           <div class="dialog" v-bind:class="{ 'dialog-active': show }">
+                <div class="dialog-content">
+                    <div class="close rotate">
+                        <span class="iconfont icon-close" @click="close"></span>
+                    </div>
+                    <slot name="header"></slot>
+                    <slot name="body"></slot>
+                    <slot name="footer"></slot>
+                </div>
+           </div>
+           <div class="dialog-overlay"></div>
+        </div>
+    </template>
+</body>
+<script src="./js/vue.js"></script>
+<script>
+    Vue.component('modal-dialog', {
+        template: '#dialog-template',
+        props:['show'],
+        methods: {
+            close: function() {
+                this.show = false
+            }
+        }
+    });
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    show: true
+		},
+		methods: {
+		    openDialog: function() {
+		        this.show = true
+		    },
+		    closeDialog: function() {
+		        this.show = false
+		    }
+		}
+	});
+</script>
+</html>

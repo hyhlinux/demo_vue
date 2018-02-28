@@ -134,4 +134,46 @@ vue2.x v-bind:传递是引用时，修改是同一个对象
 	});
 </script>
 ```
-#### 05 组件注册语法糖
+#### 20 编译作用域
+```bash
+在子组件中定义的数据，只能用在子组件的模板。在父组件中定义的数据，只能用在父组件的模板。
+如果父组件的数据要在子组件中使用，则需要子组件定义props。
+```
+#### 21/2 单个slot
+```bash
+为了让组件可以组合，我们需要一种方式来混合父组件的内容与子组件自己的模板。
+这个处理称为内容分发，Vue.js 实现了一个内容分发 API，
+使用特殊的 <slot> 元素作为原始内容的插槽
+```
+```html
+<div id="app">
+    <my-component>
+        <h1>Hello Vue.js!</h1>
+    </my-component>
+
+    <my-component>
+    </my-component>
+</div>
+<template id="myComponent">
+    <div class="content">
+        <h2>This is a component!</h2>
+        <slot>如果没有分发内容，则显示slot中的内容</slot>
+        <p>Say something...</p>
+    </div>
+</template>
+<script src="js/vue.js"></script>
+<script>
+    Vue.component('my-component', {
+        template: '#myComponent'
+    })
+
+    new Vue({
+        el: '#app'
+    })
+</script>
+```
+#### 22 指定名称的slot
+```html
+
+```
+#### 21 slot

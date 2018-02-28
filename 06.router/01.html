@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="app">
+        // 4.v-link
+        <div class="list-group">
+            <a class="list-group-item" v-link="{ path: '/home'}">Home</a>
+            <a class="list-group-item" v-link="{ path: '/about'}">About</a>
+        </div>
+	</div>
+
+</body>
+<script src="../js/vue.js"></script>
+<script src="../js/vue-router.js"></script>
+<script>
+    var Home = Vue.extend({
+        template: '<div><h1>Home</h1><p>{{msg}}</p></div>',
+        data: function() {
+            return {
+                msg: 'Hello, vue router!'
+            }
+        }
+    });
+
+    var About = Vue.extend({
+        template: '<div><h1>About</h1><p>This is the tutorial about vue-router.</p></div>'
+    });
+
+    // 3
+    var router = new VueRouter();
+    // 4.路由映射
+    router.map({
+        '/home': { component: Home },
+        '/about': { component: About }
+    });
+
+</script>
+</html>

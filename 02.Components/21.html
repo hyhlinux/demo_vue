@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../styles/demo.css" />
+</head>
+<body>
+	<div id="app">
+       <my-component v-show="display"></my-component>
+	</div>
+    <template id="myComponent">
+        <div>
+            <h2>{{ msg }}</h2>
+            <h2>{{ display }}</h2>
+            <button v-on:click="showMsg">Show Message</button>
+        </div>
+    </template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    display: true
+		},
+		components: {
+		   'my-component': {
+		        template: '#myComponent',
+		        data: function() {
+		            return {
+		                msg: 'This is a component',
+		                display: false
+		            }
+		        },
+		        methods: {
+		            showMsg: function() {
+		                alert(this.msg)
+		            }
+		        }
+		   }
+		}
+	});
+</script>
+</html>

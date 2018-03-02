@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提示框</title>
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+    <link rel="stylesheet" href="./styles/demo2.css" />
+</head>
+<body>
+	<div id="app">
+        <div class="btn-group">
+            <button class="btn-info" @click="openDialog('dialog-info')">提示信息框</button>
+            <button class="btn-success" @click="openDialog('dialog-info')">提示成功信息框</button>
+            <button class="btn-warning" @click="openDialog('dialog-info')">提示警告信息框</button>
+            <button class="btn-error" @click="openDialog('dialog-info')">提示错误信息框</button>
+        </div>
+	</div>
+    <template id="dialog-template">
+       <div class="dialogs">
+           <div class="dialog" v-bind:class="{ 'dialog-active': show }">
+               <div class="dialog-content">
+                   <div class="close rotate">
+                       <span class="iconfont icon-close" @click="close"></span>
+                   </div>
+                   <slot name="header"></slot>
+                   <slot name="body"></slot>
+                   <slot name="footer"></slot>
+               </div>
+           </div>
+           <div class="dialog-overlay"></div>
+       </div>
+    </template>
+
+</body>
+<script src="./js/vue.js"></script>
+<script>
+    Vue.component('modal-dialog', {
+        template: '#dialog-template',
+        props: ['show'],
+        methods: {
+            close: function() {
+                this.show = false
+            }
+        }
+    });
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    show: false,
+		    diaglogClass: 'dialog-info'
+		},
+		methods: {
+		    openDialog: function(dialogClass) {
+		        this.show = true;
+		        this.dialogClass = dialogClass;
+		    },
+		    closeDialog: function() {
+		        this.show = false;
+		    }
+		}
+	});
+</script>
+</html>

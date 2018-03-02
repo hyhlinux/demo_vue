@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父子组件</title>
+</head>
+<body>
+	<div id="app">
+        <p>Messages: {{ messages | json }}</p>
+        <child-component></child-component>
+	</div>
+    <template id="child-component">
+        <input v-model="msg">
+        <button @click="notify">Dispatch Event</button>
+    </template>
+</body>
+<script src="./js/vue.js"></script>
+<script>
+    Vue.component('child-component', {
+        template: '#child-component',
+        data: function() {
+            return {
+                msg: ''
+            }
+        },
+        methods: {
+            notify: function() {
+                if (this.msg.trim()) {
+                    this.$dispatch('child-msg', this.msg)
+                    this.msg = ''
+                }
+            }
+        }
+    });
+
+	var vm = new Vue({
+		el: '#app',
+		data: {
+		    messages: []
+		},
+		events: {
+		    'child-msg': function(msg) {
+		        this.messages.push(msg)
+		    }
+		}
+	});
+</script>
+</html>

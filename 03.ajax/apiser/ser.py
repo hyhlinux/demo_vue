@@ -1,9 +1,19 @@
 from sanic import Sanic
 from sanic.response import json, text
-from sanic_cors import CORS, cross_origin
+from sanic_cors import CORS
+from sanic.exceptions import NotFound
+
+from config import CONFIG
 
 app = Sanic()
+app.config.from_object(CONFIG)
 cors = CORS(app, resources={r"/api/*": {"origins": "192.168.0.96"}})
+
+
+@app.exception(NotFound)
+def ignore_404s(request, exception):
+    return text("Yep, I totally found the page: {}--{}".format(request.url, exception),
+                status=404)
 
 @app.route("/", methods=['GET'])
 async def index(request):
@@ -36,4 +46,4 @@ async def customer_handler_get(request, cid):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=app.config['PORT'], debug=app.config['DEBUG'])

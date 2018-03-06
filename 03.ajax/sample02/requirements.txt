@@ -1,0 +1,11 @@
+aiofiles==0.3.2
+feedparser==5.2.1
+httptools==0.0.10
+Jinja2==2.10
+MarkupSafe==1.0
+sanic==0.7.0
+Sanic-Cors==0.9.3
+Sanic-Plugins-Framework==0.5.2.dev20180201
+ujson==1.35
+uvloop==0.9.1
+websockets==4.0.1

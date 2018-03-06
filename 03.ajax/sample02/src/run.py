@@ -11,4 +11,4 @@ current_directory = os.path.dirname(os.path.abspath(__name__))
 app.static('/statics', os.path.join(current_directory, 'statics'))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=CONFIG.PORT, debug=CONFIG.DEBUG)

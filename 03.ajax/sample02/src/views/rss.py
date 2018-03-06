@@ -9,7 +9,7 @@ import sys
 # https://github.com/channelcat/sanic/blob/5bb640ca1706a42a012109dc3d811925d7453217/examples/jinja_example/jinja_example.py
 # 开启异步特性  要求3.6+
 enable_async = sys.version_info >= (3, 6)
-print(enable_async)
+# print(enable_async)
 app = Sanic()
 
 # jinjia2 config
@@ -19,9 +19,9 @@ env = Environment(
     enable_async=enable_async)
 
 
-def template(tpl, **kwargs):
+async def template(tpl, **kwargs):
     template = env.get_template(tpl)
-    rendered_template = template.render(**kwargs)
+    rendered_template = await template.render_async(**kwargs)
     return html(rendered_template)
 
 
@@ -54,4 +54,4 @@ async def rss_html(request):
             "link": article["link"],
             "published": article["published"]
         })
-    return template('rss.html', articles=data)
+    return await template('rss.html', articles=data)

@@ -65,7 +65,7 @@ def auth_params(*keys):
                     try:
                         post_data = json_loads(str(request.body, encoding='utf-8'))
                     except Exception as e:
-                        return response_handle(request, {'info': 'error'})
+                        return response_handle(request, {'info': 'error_{}'.format(e)}, status=400)
                     else:
                         request_params.update(post_data)
                         params = [key for key, value in post_data.items() if value]
@@ -83,7 +83,7 @@ def auth_params(*keys):
                 kwargs['request_params'] = request_params
                 return await dec_func(func, request, *args, **kwargs)
             else:
-                return response_handle(request, {'info': 'error'})
+                return response_handle(request, {'info': 'error 没有预期的参数'}, status=400)
 
         return auth_param
 
@@ -95,4 +95,4 @@ async def dec_func(func, request, *args, **kwargs):
         response = await func(request, *args, **kwargs)
         return response
     except Exception as e:
-        return response_handle(request, {'info': 'error'})
+        return response_handle(request, {'info': 'error_{}'.format(e)})

@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="fonts/iconfont.css"/>
+    <link rel="stylesheet" href="fonts/iconfont.css" />
 </head>
+
 <body>
     <div id="app">
-            <div class="container">
-                <simple-grid :data-list="gridData" :columns="gridColumns">
-                </simple-grid>
+        <div class="container">
+            <div class="form-group">
+                <label>Search</label>
+                <input type="text" class="search-input" v-model.lazy="searchQuery">
             </div>
-            <div class="container">
+        </div>
+        <div class="container">
+            <simple-grid :data-list="gridData" :columns="gridColumns" :search-key="searchQuery">>
+            </simple-grid>
+        </div>
+        <div class="container">
+            <div class="form-group">
+                <button @click="this.show = true">Create</button>
+                <button class="btn-save" @click="search">搜索</button>
+            </div>
+        </div>
+        <modal-dialog :show.sync="show">
+            <header class="dialog-header" slot="header">
+                <h1 class="dialog-title">Create New customer</h1>
+            </header>
+            <div class="dialog-body" slot="body">
                 <div class="form-group">
-                    <button @click="this.show = true">Create</button>
+                    <label>Customer Id</label>
+                    <input type="text" v-model="item.customerId" />
+                </div>
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" v-model="item.companyName" />
+                </div>
+                <div class="form-group">
+                    <label>Contact Name</label>
+                    <input type="text" v-model="item.contactName" />
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" v-model="item.phone" />
                 </div>
             </div>
-           <modal-dialog :show.sync="show">
-              <header class="dialog-header" slot="header">
-                  <h1 class="dialog-title">Create New customer</h1>
-              </header> 
-              <div class="dialog-body" slot="body">
-                    <div class="form-group">
-                        <label>Customer Id</label>
-                        <input type="text" v-model="item.customerId" />
-                    </div>
-                    <div class="form-group">
-                        <label>Company Name</label>
-                        <input type="text" v-model="item.companyName" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Contact Name</label>
-                        <input type="text" v-model="item.contactName" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" v-model="item.phone" />
-                    </div> 
-              </div>
-
-              <footer class="dialog-footer" slot="footer">
+            <footer class="dialog-footer" slot="footer">
                 <div class="form-group">
                     <label></label>
                     <button class="btn-save" v-on:click="createCustomer">Save</button>
@@ -51,93 +57,98 @@
             </footer>
         </modal-dialog>
     </div>
-        <template id="grid-template">
-            <table>
-                <thead>
-                    <tr>
-                        <th v-for="col in columns">
-                            {{ col | capitalize}}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(index,entry) in dataList">
-                        <td v-for="col in columns">
-                            {{ entry[col] }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </template>
-        <template id="dialog-template">
-           <div class="dialogs">
-               <div class="dialog" v-bind:class="{ 'dialog-active': show }">
-                   <div class="dialog-content">
-                       <div class="close rotate">
-                           <span class="iconfont icon-close" @click="close"></span>
-                       </div>
-                       <slot name="header"></slot>
-                        <slot name="body"></slot>
-                        <slot name="footer"></slot>
-                   </div>
-               </div>
-           </div> 
-        </template>
+    <template id="grid-template">
+        <table>
+            <thead>
+                <tr>
+                    <th v-for="col in columns">
+                        {{ col | capitalize}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(index,entry) in dataList | filterBy searchKey">
+                    <td v-for="col in columns">
+                        {{ entry[col] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+    <template id="dialog-template">
+        <div class="dialogs">
+            <div class="dialog" v-bind:class="{ 'dialog-active': show }">
+                <div class="dialog-content">
+                    <div class="close rotate">
+                        <span class="iconfont icon-close" @click="close"></span>
+                    </div>
+                    <slot name="header"></slot>
+                    <slot name="body"></slot>
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+        </div>
+    </template>
 </body>
 <script src="js/vue.js"></script>
 <script src="js/vue-resource.js"></script>
 <script>
-    //Vue.http.options.emulateJSON = true;
-    Vue.component('simple-grid', {
-        template: '#grid-template',
-        props: ['dataList', 'columns']
-    });
-    Vue.component('modal-dialog', {
-        template: '#dialog-template',
-        props: ['show'],
-        methods: {
-            close: function() {
-                this.show = false;
-            }
+//Vue.http.options.emulateJSON = true;
+Vue.component('simple-grid', {
+    template: '#grid-template',
+    props: ['dataList', 'columns']
+});
+Vue.component('modal-dialog', {
+    template: '#dialog-template',
+    props: ['show'],
+    methods: {
+        close: function() {
+            this.show = false;
         }
-    });
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            show: false,
-            item: {},
-            gridColumns: ['_id', 'customerId', 'companyName', 'contactName', 'phone'],
-            gridData: [],
-            apiUrlGet: 'http://localhost:8000/api/contanct',
-            apiUrlPost: 'http://localhost:8000/api/contanct',
+    }
+});
+var vm = new Vue({
+    el: '#app',
+    data: {
+        searchQuery: '',
+        show: false,
+        item: {},
+        gridColumns: ['_id', 'customerId', 'companyName', 'contactName', 'phone'],
+        gridData: [],
+        apiUrlGet: 'http://localhost:8000/api/contanct',
+        apiUrlPost: 'http://localhost:8000/api/contanct',
+    },
+    ready: function() {
+        this.getCustomers();
+    },
+    methods: {
+        search: function () {
+            console.log(this.searchQuery);
         },
-        ready: function () {
-            this.getCustomers();
+        closeDialog: function() {
+            this.show = false
         },
-        methods: {
-            closeDialog: function() {
-                this.show = false
-            },
-            getCustomers: function (data) {
-                this.$http.get(this.apiUrlGet)
-                    .then((response) => {
-                        console.log(JSON.parse(response.data));
-                        this.$set('gridData', JSON.parse(response.data));
-                    })
-                    .catch(function(response) {
-                        console.log(response);
-                    })
-            },
-            createCustomer: function() {
-                var vm = this;
-                vm.$http.post(vm.apiUrlPost, vm.item)
-                    .then((response) => {
-                        vm.$set('item', {});
-                        vm.getCustomers();
-                    })
-                this.show = false;
-            }
+        getCustomers: function(data) {
+            this.$http.get(this.apiUrlGet)
+                .then((response) => {
+                    console.log(JSON.parse(response.data));
+                    this.$set('gridData', JSON.parse(response.data));
+                })
+                .catch(function(response) {
+                    console.log(response);
+                })
+        },
+        createCustomer: function() {
+            var vm = this;
+            vm.$http.post(vm.apiUrlPost, vm.item)
+                .then((response) => {
+                    vm.$set('item', {});
+                    vm.getCustomers();
+                })
+            this.show = false;
         }
-    });
+    }
+});
 </script>
+
 </html>

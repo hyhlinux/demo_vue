@@ -43,7 +43,7 @@ class ContantView(HTTPMethodView):
         self.db.user.save(doc)
         return json({"_id": "{}".format(doc.get('_id', -1))})
 
-    @cached(ttl=1000, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
+    @cached(ttl=10, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
     async def get_contanct(self):
         await asyncio.sleep(1)
         # 通过查询
@@ -52,6 +52,7 @@ class ContantView(HTTPMethodView):
         for doc in docs:
             contants.append(doc)
         # data = await MotorBase().get_db().user.find().to_list(length=10)
+        print(contants)
         return contants
 
 contanct_bp.add_route(ContantView.as_view(), '/', methods=['GET', 'POST'])

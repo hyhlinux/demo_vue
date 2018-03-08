@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import sys
 import datetime
 import hashlib
 
@@ -18,7 +19,7 @@ except ImportError:
     from json import dumps as json_dumps
 
 from src.config import CONFIG
-operate_bp = Blueprint('operate_blueprint', url_prefix='operate')
+operate_bp = Blueprint('operate', url_prefix='/api/operate')
 operate_bp.static('/statics/api_json', CONFIG.BASE_DIR + '/statics/operate')
 
 @operate_bp.listener('before_server_start')
@@ -32,10 +33,13 @@ def close_connection(operate_bp, loop):
     motor_base = None
 
 
+enable_async = sys.version_info >= (3, 6)
+
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('views.operate_blueprint', '../templates/operate'),
-    autoescape=select_autoescape(['html', 'xml', 'tpl']))
+    loader=PackageLoader('views.operate',  '../templates/operate'),
+    autoescape=select_autoescape(['html', 'xml', 'tpl']),
+    enable_async=enable_async)
 
 
 async def template(tpl, **kwargs):

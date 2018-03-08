@@ -14,7 +14,6 @@ from src.config import CONFIG
 enable_async = sys.version_info >= (3, 6)
 
 json_bp = Blueprint('rss_json', url_prefix='json')
-# json_bp.static('/statics/rss_json', CONFIG.BASE_DIR + '/statics/rss_json')
 json_bp.static('/statics', os.path.join(CONFIG.BASE_DIR, './statics/rss_json'))
 # jinjia2 config
 env = Environment(

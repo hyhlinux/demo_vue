@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from owllook.config import CONFIG
-from owllook.utils.tools import singleton
+from src.config import CONFIG
+from src.utils.tools import singleton
 
 
 @singleton

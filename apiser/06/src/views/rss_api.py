@@ -11,7 +11,7 @@ except ImportError:
     from json import loads as json_loads
 
 from src.config import CONFIG
-from src.tools.mid_decorator import auth_params
+from src.utils import auth_params
 
 
 enable_async = sys.version_info >= (3, 6)

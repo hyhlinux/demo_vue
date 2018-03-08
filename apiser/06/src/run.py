@@ -6,27 +6,29 @@ from sanic import Sanic
 from sanic.exceptions import NotFound
 from sanic.response import text, redirect, html
 from sanic_session import RedisSessionInterface
+from sanic_cors import CORS, cross_origin
 
 sys.path.append('../')
-from src.views import json_bp, html_bp, api_bp
+from src.views import json_bp, html_bp, api_bp, operate_bp, contanct_bp
 from src.database.redis import RedisSession
 from src.config import LOGGER, CONFIG
 
 app = Sanic(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.listener('before_server_start')
 def init_cache(app, loop):
     LOGGER.info("Starting aiocache")
     app.config.from_object(CONFIG)
     REDIS_DICT = CONFIG.REDIS_DICT
-    aiocache.settings.set_defaults(
-        class_="aiocache.RedisCache",
-        endpoint=REDIS_DICT.get('REDIS_ENDPOINT', 'localhost'),
-        port=REDIS_DICT.get('REDIS_PORT', 6379),
-        db=REDIS_DICT.get('CACHE_DB', 0),
-        password=REDIS_DICT.get('REDIS_PASSWORD', None),
-        loop=loop,
-    )
+    # aiocache.caches.set_config(
+    #     class_="aiocache.RedisCache",
+    #     endpoint=REDIS_DICT.get('REDIS_ENDPOINT', 'localhost'),
+    #     port=REDIS_DICT.get('REDIS_PORT', 6379),
+    #     db=REDIS_DICT.get('CACHE_DB', 0),
+    #     password=REDIS_DICT.get('REDIS_PASSWORD', None),
+    #     loop=loop,
+    # )
     LOGGER.info("Starting redis pool")
     redis_session = RedisSession()
     # redis instance for app
@@ -72,6 +74,8 @@ async def save_session(request, response):
 app.blueprint(json_bp)
 app.blueprint(html_bp)
 app.blueprint(api_bp)
+app.blueprint(operate_bp)
+app.blueprint(contanct_bp)
 
 
 # @app.exception(NotFound)
@@ -79,15 +83,14 @@ app.blueprint(api_bp)
 #     return text("Yep, I totally found the page: {}".format(request.url))
 
 
-@app.route("/")
-async def index(request):
-    # interact with the session like a normal dict
-    if not request['session'].get('foo'):
-        request['session']['foo'] = 0
-
-    request['session']['foo'] += 1
-
-    return text(request['session']['foo'])
+# @app.route("/")
+# async def index(request):
+#     # interact with the session like a normal dict
+#     if not request['session'].get('user'):
+#         return redirect('/operate/login')
+#
+#     user = request['session'].get('user')
+#     return text(user)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=CONFIG.PORT, debug=CONFIG.DEBUG)
+    app.run(host="0.0.0.0", port=CONFIG.PORT)

@@ -25,7 +25,7 @@ class DevConfig(Config):
     # website
     WEBSITE = dict(
         IS_RUNNING=os.getenv('OWLLOOK_IS_RUNNING', True),
-        TOKEN=os.getenv('OWLLOOK_TOKEN', '')
+        TOKEN=os.getenv('OWLLOOK_TOKEN', 'hyhlinux')
     )
 
     AUTH = {

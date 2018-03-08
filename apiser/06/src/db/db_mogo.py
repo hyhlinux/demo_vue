@@ -114,6 +114,10 @@ if __name__ == '__main__':
         data = {
             "user": 'user01',
             "password": '123456',
+            'customerId': 'user01',
+            'companyName': 'apkpure',
+            'contactName': 'frend',
+            'phone': '1234556',
         }
         result = await db.user.insert_one(data)
         print('插入成功：{0}'.format(result.inserted_id))

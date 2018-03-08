@@ -31,5 +31,5 @@ logging.basicConfig(
     format=logging_format,
     level=logging.DEBUG
 )
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger('apiser')
 CONFIG = load_config()

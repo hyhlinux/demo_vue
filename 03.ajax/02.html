@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <simple-grid :data-list="gridData" :columns="gridColumns">
+
+            </simple-grid>
+        </div>
+    </div>
+    <template id="grid-template">
+        <table>
+            <thead>
+            <tr>
+               <th v-for="col in columns">
+                   {{ col | capitalize }}
+               </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(index, entry) in dataList">
+                <td v-for="col in columns">
+                    {{ entry[col] }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </template>
+
+</body>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+<script>
+    Vue.component('simple-grid', {
+        template: '#grid-template',
+        props: ['dataList', 'columns']
+    });
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            gridColumns: ['customerId', 'companyName', 'contactName', 'phone'],
+            gridData: [],
+            apiUrl: 'http://localhost:8000/api/contanct',
+//            apiUrl: 'http://192.168.0.96:8000/',
+        },
+        ready: function () {
+            this.getCustomers();
+        },
+        methods: {
+            getCustomers: function (data) {
+                this.$http.get(this.apiUrl)
+                    .then((response) => {
+                        console.log(JSON.parse(response.data));
+                        this.$set('gridData', JSON.parse(response.data));
+                    })
+                    .catch(function(response) {
+                        console.log(response);
+                    })
+            },
+        }
+    });
+</script>
+</html>

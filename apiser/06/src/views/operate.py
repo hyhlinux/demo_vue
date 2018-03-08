@@ -14,11 +14,12 @@ from src.config import CONFIG, LOGGER
 
 try:
     from ujson import dumps as json_dumps
-except:
+except ImportError:
     from json import dumps as json_dumps
 
+from src.config import CONFIG
 operate_bp = Blueprint('operate_blueprint', url_prefix='operate')
-
+operate_bp.static('/statics/api_json', CONFIG.BASE_DIR + '/statics/operate')
 
 @operate_bp.listener('before_server_start')
 def setup_db(operate_bp, loop):
@@ -37,13 +38,18 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml', 'tpl']))
 
 
-def template(tpl, **kwargs):
+async def template(tpl, **kwargs):
     template = env.get_template(tpl)
-    return html(template.render(kwargs))
+    rendered_template = await template.render_async(**kwargs)
+    return html(rendered_template)
 
+
+@operate_bp.route("/login", methods=['GET'])
+async def owllook_get_login(request):
+    return await template('login.html', static='/html/statics')
 
 @operate_bp.route("/login", methods=['POST'])
-async def owllook_login(request):
+async def owllook_post_login(request):
     """
     用户登录
     :param request:
@@ -70,11 +76,6 @@ async def owllook_login(request):
                 response.cookies['owl_sid']['httponly'] = True
                 # 此处设置存于服务器session的user值
                 request['session']['user'] = user
-                # response.cookies['user'] = user
-                # response.cookies['user']['expires'] = date + datetime.timedelta(days=30)
-                # response.cookies['user']['httponly'] = True
-                # response = json({'status': 1})
-                # response.cookies['user'] = user
                 return response
             else:
                 return json({'status': -2})

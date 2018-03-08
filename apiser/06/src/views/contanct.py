@@ -9,6 +9,7 @@ except ImportError:
 from jinja2 import Environment, PackageLoader, select_autoescape
 from sanic import Blueprint
 from sanic.response import html, json
+from sanic.views import HTTPMethodView
 from urllib.parse import parse_qs, unquote
 
 from src.database.mongodb import MotorBase
@@ -23,10 +24,10 @@ except ImportError:
 
 contanct_bp = Blueprint('contanct', url_prefix='api/contanct')
 
-@contanct_bp.listener('before_server_start')
-def setup_db(operate_bp, loop):
-    global motor_base
-    motor_base = MotorBase()
+# @contanct_bp.listener('before_server_start')
+# def setup_db(operate_bp, loop):
+#     global motor_base
+#     motor_base = MotorBase()
 
 
 @contanct_bp.listener('after_server_stop')
@@ -60,22 +61,31 @@ def new_contant(num=10):
         ret.append(people)
     return ret
 
-@cached(ttl=1000, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
-async def get_contanct():
-    print('1th, sleep 1')
-    import asyncio
-    await asyncio.sleep(1)
-    motor_db = motor_base.get_db()
-    data = await motor_db.user.find_one({'user': 'user01'})
-    if data:
+class ContantView(HTTPMethodView):
+    db = MotorBase().get_db()
+
+    async def get(self, request):
+        # data = await self.get_contanct()
+        data = await self.db.user.find_one()
+        return json(data)
+
+    async def post(self, request):
+        doc = request.json
+        self.db.user.save(doc)
+        return json({"code": 0})
+
+    # @cached(ttl=1000, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
+    async def get_contanct(self):
+        print('1th, sleep 1')
+        import asyncio
+        await asyncio.sleep(1)
+        data = await self.db.user.find().to_list()
+        if data:
+            print(data)
+        else:
+            data = new_contant()
         print(data)
-    else:
-        data = new_contant()
-    print(data)
-    return data
+        return data
 
 
-@contanct_bp.route("/")
-async def contant_json(request):
-    data = await get_contanct()
-    return json(data)
+contanct_bp.add_route(ContantView.as_view(), '/', methods=['GET', 'POST'])

@@ -7,6 +7,7 @@ class Config(object):
     TIMEZONE = 'Asia/Shanghai'
     BASE_DIR = os.path.dirname(os.path.abspath(__name__))
     DBClient = None
+    MONGO_URI = "mongodb://{host}:{port}/{database}".format( database='test', port=27017, host='localhost' )
     # Application config
     DEBUG = False
     VAL_HOST = os.getenv('VAL_HOST', 'true')

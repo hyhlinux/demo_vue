@@ -7,14 +7,18 @@ from sanic.exceptions import NotFound
 from sanic.response import text, redirect, html
 from sanic_session import RedisSessionInterface
 from sanic_cors import CORS, cross_origin
+from sanic_mongo import Mongo
 
 sys.path.append('../')
 from src.views import json_bp, html_bp, api_bp, operate_bp, contanct_bp
 from src.database.redis import RedisSession
 from src.config import LOGGER, CONFIG
 
+
 app = Sanic(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+Mongo.SetConfig(app, test=CONFIG.MONGO_URI)
+Mongo(app)
 
 @app.listener('before_server_start')
 def init_cache(app, loop):

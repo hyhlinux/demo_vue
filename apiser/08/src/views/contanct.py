@@ -48,7 +48,7 @@ class ContantView(HTTPMethodView):
     async def options(self, request):
         return text("ok")
 
-    # @cached(ttl=10, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
+    @cached(ttl=100, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
     async def get_contanct(self):
         await asyncio.sleep(1)
         # 通过查询

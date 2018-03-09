@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="container text-center">
+            <span id="message"> {{ msg | json }}</span>
+        </div>
+        <div class="container">
+            <div class="account-info">
+                <span v-if="userName">{{ userName }} | <a href="#" @click="logout">Logout</a> </span>
+                <span v-else><a href="#" @click="popupLogin">Login</a> | <a href="#" @click="popupRegister">Register</a></span>
+            </div>
+        </div>
+        <!--登陆框-->
+        <modal-dialog v-bind:show.sync="showLogin">
+            <header class="dialog-header" slot="header">
+                <h1 class="dialog-title">Login</h1>
+            </header>
+
+            <div class="dialog-body" slot="body">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" v-model="loginModel.username" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" v-model="loginModel.password" />
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <button @click="login">Login</button>
+                </div>
+            </div>
+        </modal-dialog>
+        <!--注册框-->
+         <modal-dialog v-bind:show.sync="showRegister">
+            <header class="dialog-header" slot="header">
+                <h1 class="dialog-title">Register</h1>
+            </header>
+
+            <div class="dialog-body" slot="body">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" v-model="registerModel.username" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" v-model="registerModel.password" />
+                </div>
+                <div class="form-group">
+                    <label>ConfirmPassword</label>
+                    <input type="text" v-model="registerModel.confirm_password" />
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <button @click="register">Register</button>
+                </div>
+            </div>
+        </modal-dialog>
+        <hr>
+        <div class="container">
+           <button>API</button>
+        </div>
+    </div>
+    <template id="grid-template">
+
+    </template>
+    <template id="dialog-template">
+        <div class="dialogs">
+            <div class="dialog" v-bind:class="{ 'dialog-active': show }">
+                <div class="dialog-content">
+                    <div class="close rotate">
+                       <span class="iconfont icon-close" @click="close"></span>
+                    </div>
+                    <slot name="header"></slot>
+                    <slot name="body"></slot>
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="loading-template">
+        <div class="loading-overlay">
+            <div class="sk-three-bounce">
+                <div class="sk-child sk-bounce1"></div>
+                <div class="sk-child sk-bounce2"></div>
+                <div class="sk-child sk-bounce3"></div>
+            </div>
+        </div>
+    </template>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+<script>
+	Vue.component('simple-grid', {
+		template: '#grid-template',
+		props: ['dataList', 'columns'],
+		methods: {
+			loadEntry: function(key) {
+				this.$dispatch('load-entry', key)
+			},
+			deleteEntry: function(entry) {
+				this.$dispatch('delete-entry', entry)
+			}
+		}
+	})
+
+    Vue.component('modal-dialog', {
+    	template: '#dialog-template',
+		props: ['show'],
+		methods: {
+			close: function() {
+			    this.show = false
+			}
+		}
+	})
+</script>
+<script>
+   Vue.http.options.emulateJSON = true;
+   /*
+   var help = new Vue({
+		el: '#help',
+		data: {
+			showLoading: false,
+			showDialog: false,
+			errorCode: ''
+		},
+		components: {
+			'loading': {
+				template: '#loading-template',
+			}
+		}
+   });
+   */
+
+   var vm = new Vue({
+        el: '#app',
+        data: {
+            show: true,
+            showLogin: false,
+			showRegister: false,
+            apiUrl: 'http://localhost:8000/api/',
+            apiUrllogin: 'http://localhost:8000/api/login',
+            apiUrllogout: 'http://localhost:8000/api/logout',
+            apiUrlRegister: 'http://localhost:8000/api/register',
+            msg: '',
+            userName: '',
+            loginModel: {
+			    username: '',
+				password: '',
+				grant_type: 'password'
+			},
+			registerModel: {
+				email: '',
+				password: '',
+				confirm_password: ''
+			},
+        },
+        ready: function() {
+            var userName = sessionStorage.getItem('userName');
+            if (userName) {
+                this.userName = userName;
+            }
+        },
+        methods: {
+            popupRegister: function() {
+				this.showRegister = true
+			},
+			popupLogin: function() {
+				this.showLogin = true
+			},
+            login: function() {
+                this.$http.post(this.apiUrllogin, this.loginModel)
+                .then((response) => {
+                    var body = response.json();
+                    this.msg = '登录成功！';
+                    this.userName = body.user_name;
+                    this.showLogin = false;
+                    sessionStorage.setItem('accessToken', body.access_token);
+                    sessionStorage.setItem('userName', body.user_name);
+                }).catch(this.requestError)
+            },
+            logout: function() {
+                this.$http.post(this.apiUrllogout)
+                .then((response) => {
+                    this.msg = '注销成功！'
+                    this.userName = ''
+                    this.loginModel.username = ''
+                    this.loginModel.password = ''
+
+                    sessionStorage.removeItem('userName')
+                    sessionStorage.removeItem('accessToken')
+                }).catch(this.requestError)
+            },
+            requestError: function(response) {
+                this.msg = response.json()
+            },
+            register: function() {
+                this.$http.post(this.apiUrlRegister, this.registerModel)
+                .then((response) => {
+                    this.msg = '注册成功！'
+                }).catch((response) => {
+                    this.msg = response.json()
+                })
+            },
+            callApi: function() {
+                var headers = {}
+                headers.Authorization = 'Bearer ' + sessionStorage.getItem('accessToken')
+                this.$http.get(this.apiUrl, {
+                        headers: headers
+                })
+                .then((response) => {
+                    this.result = response.json()
+                }).catch(this.requestError)
+            }
+        }
+   });
+</script>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

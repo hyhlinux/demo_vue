@@ -14,13 +14,13 @@ try:
 except ImportError:
     from json import dumps as json_dumps
 
-contanct_bp = Blueprint('contanct', url_prefix='api/contanct')
+register_bp = Blueprint('register', url_prefix='api/register')
 enable_async = sys.version_info >= (3, 6)
 
 
 # jinjia2 config
 env = Environment(
-    loader=PackageLoader('views.contanct',  '../templates/operate'),
+    loader=PackageLoader('views.register',  '../templates/register'),
     autoescape=select_autoescape(['html', 'xml', 'tpl']),
     enable_async=enable_async)
 
@@ -30,35 +30,29 @@ async def template(tpl, **kwargs):
     return html(rendered_template)
 
 
-class ContantView(HTTPMethodView):
+class RegisterView(HTTPMethodView):
     Client = MongoClient()
     db = Client['owllook']
 
     async def get(self, request):
-        contants = await self.get_contanct()
-        return json(contants)
+        # contants = await self.get_contanct()
+        # return json(contants)
+        return text('请去注册')
 
     async def post(self, request):
         doc = request.json
-        if doc:
-            self.db.user.save(doc)
-        return json({"_id": "{}".format(doc.get('_id', -1))})
+        if not doc:
+            return json({"msg": "请求数据为空"}, status=400)
+
+        new_user = {
+            "email": doc.get('email', ''),
+            "username": doc.get('username', ''),
+            "password": doc.get('password', ''), #todo hash
+        }
+        self.db.user.save(new_user)
+        return json({"_id": "{}".format(new_user.get('_id', -1))})
 
     async def options(self, request):
         return text("ok")
 
-    @cached(ttl=20, cache=RedisCache, key="contanct", serializer=JsonSerializer(), port=6379, namespace="main")
-    async def get_contanct(self):
-        await asyncio.sleep(1)
-        # 通过查询
-        # docs = self.db.user.find({},{"_id": 0})
-        docs = self.db.user.find()
-        contants = []
-        for doc in docs:
-            doc["_id"] = str(doc["_id"])
-            contants.append(doc)
-        # data = await MotorBase().get_db().user.find().to_list(length=10)
-        print(contants)
-        return contants
-
-contanct_bp.add_route(ContantView.as_view(), '/', methods=['GET', 'POST', 'OPTIONS'])
+register_bp.add_route(RegisterView.as_view(), '/', methods=['GET', 'POST', 'OPTIONS'])

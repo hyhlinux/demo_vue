@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="container text-center">
+            <span id="message"> {{ msg }}</span>
+        </div>
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+<script>
+   Vue.http.options.emulateJSON = true;
+   var vm = new Vue({
+        el: '#app',
+        data: {
+            show: true,
+            apiUrllogin: 'http://localhost:8000/api/token',
+            apiUrllogout: 'http://localhost:8000/api/logout',
+            msg: '',
+            userName: '',
+            loginModel: {
+                username: '',
+                password: '',
+                grant_type: 'password',
+            }
+        },
+        ready: function() {
+            this.userName = sessionStorage.getItem('userName');
+        },
+        methods: {
+            login: function() {
+                var vm = this;
+                vm.msg = '';
+                console.log('login');
+                console.log(vm.loginModel);
+                vm.loginModel.user = vm.loginModel.email;
+                vm.$http.post(vm.apiUrllogin, vm.loginModel)
+                .then((response) => {
+                    var ret = JSON.parse(response.data);
+                    vm.msg = ret.msg;
+                    vm.userName = ret.userName;
+                    switch(ret.status) {
+                        case 0:
+                           break;
+                        case 1:
+                           sessionStorage.setItem('accessToken', ret.access_token);
+                           sessionStorage.setItem('userName', ret.userName);
+                           break;
+                        case -1:
+                           vm.show = true;
+                           break;
+                        case -2:
+                           vm.show = false;
+                           break;
+                        default:
+                            vm.msg = '登陆异常';
+                    }
+                })
+                .catch(function(response) {
+                    console.log(response);
+                    vm.msg = '登陆失败';
+                })
+            },
+            logout: function() {
+                var vm = this;
+                vm.msg = '';
+                console.log('logout');
+                vm.$http.post(vm.apiUrllogout)
+                .then((response) => {
+                   vm.msg = '注销成功';
+                   vm.userName = '';
+                   vm.loginModel.username = ''
+                   vm.loginModel.password = ''
+                   sessionStorage.removeItem('accessToken');
+                   sessionStorage.removeItem('userName');
+                })
+                .catch(function(response) {
+                    console.log(response);
+                    vm.msg = '注销失败';
+                })
+            },
+        }
+   });
+</script>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

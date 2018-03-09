@@ -6,11 +6,15 @@ from sanic_cors import CORS
 sys.path.append('../')
 from src.config import CONFIG
 from src.views import contanct_bp
+from src.views import register_bp
+from src.views import login_bp
 
 app = Sanic()
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 app.blueprint(contanct_bp)
+app.blueprint(register_bp)
+app.blueprint(login_bp)
 
 @app.route("/")
 async def test(request):

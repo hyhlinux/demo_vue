@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="container text-center">
+            <span id="message"> {{ msg }}</span>
+        </div>
+        <div class=""></div>
+        <div class="container">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" v-model="loginModel.username">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" v-model="loginModel.password">
+            </div>
+             <div class="form-group" v-show="!show">
+                <label>确认密码</label>
+                <input type="password" v-model="registerModel.confirmPassword">
+            </div>
+            <div class="form-group" v-show="show">
+                <label></label>
+                <button @click="login">登陆</button>
+            </div>
+            <div class="form-group" v-show="!show">
+                <label></label>
+                <button @click="register">注册</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+<script>
+   var vm = new Vue({
+        el: '#app',
+        data: {
+            show: true,
+            apiUrlregister: 'http://localhost:8000/api/register',
+            apiUrllogin: 'http://localhost:8000/api/login',
+            apiUrlGet: 'http://localhost:8000/api/contanct',
+            apiUrlPost: 'http://localhost:8000/api/contanct',
+            msg: '',
+            registerModel: {
+                email: '',
+                pwd: '',
+                confirmPwd: '',
+            },
+            loginModel: {
+                username: '',
+                password: '',
+            }
+        },
+        methods: {
+            login: function() {
+                var vm = this;
+                vm.msg = '';
+                console.log('login');
+                console.log(vm.loginModel);
+                vm.loginModel.user = vm.loginModel.email;
+                vm.$http.post(vm.apiUrllogin, vm.loginModel)
+                .then((response) => {
+                    //状态码
+                    //:   -2  用户不存在
+                    //:   -1  用户名或密码不能为空
+                    //:   0   用户名或密码错误
+                    //:   1   登陆成功
+                    var ret = JSON.parse(response.data);
+                    vm.msg = ret.msg;
+                    switch(ret.status) {
+                        case 0:
+                           break;
+                        case 1:
+                           break;
+                        case -1:
+                           vm.show = true;
+                           break;
+                        case -2:
+                           vm.show = false;
+                           break;
+                        default:
+                            vm.msg = '登陆异常';
+                    }
+                })
+                .catch(function(response) {
+                    console.log(response);
+                    vm.msg = '登陆失败';
+                })
+            },
+            register: function() {
+                var vm = this;
+                vm.msg = '';
+                console.log('register');
+                console.log(vm.registerModel);
+                vm.$http.post(vm.apiUrlregister, vm.registerModel)
+                .then((response) => {
+                    //vm.getCustomers();
+                    console.log(response);
+                    vm.msg = '注册成功';
+                    vm.show = true;
+                })
+                .catch(function(response) {
+                    console.log(response);
+                    vm.msg = '注册失败';
+                })
+            },
+        }
+   });
+</script>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

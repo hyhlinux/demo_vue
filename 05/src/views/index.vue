@@ -38,9 +38,16 @@
                 </h1>
                 <h2>
                     <p>Welcome to your iView app!</p>
+                    <router-link to="/admin">admin</router-link>
+                    <br>
+                    <router-link to="/login">login</router-link>
+                    <br>
+                    <router-link to="/user/foo">user</router-link>
+                    <br>
+                    <router-link to="/user/foo/profile">profile</router-link>
+                    <br>
                     <Button type="ghost" @click="handleStart">Start iView</Button>
                 </h2>
-                <Input v-model="value" placeholder="Enter something..." style="width: 300px"></Input>
             </Col>
         </Row>
     </div>

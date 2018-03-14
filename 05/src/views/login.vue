@@ -1,54 +1,127 @@
-<style scoped>
-    .index {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        text-align: center;
-    }
-
-    .index h1 {
-        height: 150px;
-    }
-
-    .index h1 img {
-        height: 100%;
-    }
-
-    .index h2 {
-        color: #666;
-        margin-bottom: 200px;
-    }
-
-    .index h2 p {
-        margin: 0 0 50px;
-    }
-
-    .index .ivu-row-flex {
-        height: 100%;
-    }
-</style>
 <template>
-    <div class="index">
-        <Row type="flex" justify="center" align="middle">
-            <Col span="24">
-                <h2>
-                    <p>Welcome to Login!</p>
-                </h2>
-                <Input v-model="value" placeholder="Enter something..." style="width: 300px"></Input>
-            </Col>
-        </Row>
-    </div>
+    <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+        <FormItem prop="user">
+            <Input type="text" v-model="formInline.user" placeholder="Username">
+                <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+        </FormItem>
+        <FormItem prop="password">
+            <Input type="password" v-model="formInline.password" placeholder="Password">
+                <Icon type="ios-locked-outline" slot="prepend"></Icon>
+            </Input>
+        </FormItem>
+        <FormItem prop="verifyCode">
+                <Input v-model="formInline.verifyCode" placeholder="请输入验证码">
+                    <span slot="prepend">
+                    <Icon :size="14" type="lock-combination"></Icon>
+                    </span>
+                    <Button slot="append" @click="createCode">{{checkCode}}</Button>
+                </Input>
+        </FormItem>
+        <FormItem>
+            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+        </FormItem>
+    </Form>
 </template>
 <script>
+import util from '../libs/util.js'
     export default {
-        data: function() {
+        data () {
             return {
-                value: ''
+                formInline: {
+                    user: '',
+                    password: '',
+                    verifyCode: ''
+                },
+                checkCode:'',
+                ruleInline: {
+                    user: [
+                        { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+                        { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                    ],
+                    verifyCode: [
+                        { required: true, message: '验证码不能为空', trigger: 'blur' }
+                    ]
+                }
             }
         },
         methods: {
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        if(this.formInline.verifyCode.toUpperCase()!= this.checkCode.toUpperCase()){
+                            this.$Message.info('验证码不正确');
+                            this.createCode();
+                            return;
+                        }
+
+                        let _this = this;
+                        util.ajax.post('/api/login', _this.formInline)
+                        .then((response) => {
+                            //状态码
+                            //:   -2  用户不存在
+                            //:   -1  用户名或密码不能为空
+                            //:   0   用户名或密码错误
+                            //:   1   登陆成功
+                            var ret = JSON.parse(response.data);
+                            _this.$Message.debug(ret.msg);
+                            switch(ret.status) {
+                            case 0:
+                                break;
+                            case 1:
+                                break;
+                            case -1:
+                                _this.show = true;
+                                _this.formInline = {
+                                    userName: '',
+                                    password: '', 
+                                    verifyCode: '',
+                                };
+                                this.createCode();
+                                break;
+                            case -2:
+                                _this.show = false;
+                                _this.$router.push({
+                                    name: 'register'
+                                });
+                                break;
+                            default:
+                                _this.$Message.info('登陆异常, 稍后重试');
+                            }
+                            _this.$Message.success('Success!');
+                        })
+                        .catch(function(response) {
+                            console.log(response);
+                            this.createCode();
+                            this.$Message.info('登陆失败');
+                        })
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            },
+            createCode(){
+                let code = "";    
+                var codeLength = 4;//验证码的长度   
+                var random = new Array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R',   
+           'S','T','U','V','W','X','Y','Z');//随机数   
+                for(var i = 0; i < codeLength; i++) {//循环操作   
+                    var index = Math.floor(Math.random()*36);//取得随机数的索引（0~35）   
+                    code += random[index];//根据索引取得随机数加到code上   
+                }   
+                this.checkCode = code;//把code值赋给验证码   
+            },
         }
-    };
+    }
 </script>
+
+<style>
+    .verification1{
+    vertical-align: middle;
+    transform: translate(-15px,0);
+    width: 102px;
+}
+</style>

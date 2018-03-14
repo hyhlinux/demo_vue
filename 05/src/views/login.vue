@@ -1,7 +1,7 @@
 <template>
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
         <FormItem prop="user">
-            <Input type="text" v-model="formInline.user" placeholder="Username">
+            <Input type="text" v-model="formInline.username" placeholder="Username">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
             </Input>
         </FormItem>
@@ -29,13 +29,13 @@ import util from '../libs/util.js'
         data () {
             return {
                 formInline: {
-                    user: '',
+                    username: '',
                     password: '',
                     verifyCode: ''
                 },
                 checkCode:'',
                 ruleInline: {
-                    user: [
+                    username: [
                         { required: true, message: 'Please fill in the user name', trigger: 'blur' }
                     ],
                     password: [
@@ -80,7 +80,7 @@ import util from '../libs/util.js'
                                     password: '', 
                                     verifyCode: '',
                                 };
-                                this.createCode();
+                                _this.createCode();
                                 break;
                             case -2:
                                 _this.show = false;
@@ -95,11 +95,11 @@ import util from '../libs/util.js'
                         })
                         .catch(function(response) {
                             console.log(response);
-                            this.createCode();
-                            this.$Message.info('登陆失败');
+                            _this.createCode();
+                            _this.$Message.info('登陆失败');
                         })
                     } else {
-                        this.$Message.error('Fail!');
+                        _this.$Message.error('Fail!');
                     }
                 })
             },
@@ -114,6 +114,9 @@ import util from '../libs/util.js'
                 }   
                 this.checkCode = code;//把code值赋给验证码   
             },
+        },
+        created(){
+            this.createCode();
         }
     }
 </script>

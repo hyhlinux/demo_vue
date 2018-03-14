@@ -3,7 +3,7 @@ from .config import Config
 
 class DevConfig(Config):
     DEBUG = True
-    PORT = 8000
+    PORT = 8888
     AUTH = {
         "Owllook-Api-Key": os.getenv('OWLLOOK_API_KEY', "your key")
     }

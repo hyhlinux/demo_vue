@@ -22,6 +22,11 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
     next();
+    // if (window.localStorage.getItem('token')) {
+    //     next();
+    // }else {
+    //     next('/login');
+    // }
 });
 
 router.afterEach(() => {

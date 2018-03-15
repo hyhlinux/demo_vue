@@ -10,21 +10,24 @@ const routers = [
     {
         path: '/',
         meta: {
-            title: 'index'
+            title: 'index',
+            requiresAuth: true,
         },
         component: Index,
     },
     {
         path: '/home',
         meta: {
-            title: 'home'
+            title: 'home',
+            requiresAuth: true,
         },
         component: Home,
     },
     {
         path: '/admin',
         meta: {
-            title: 'admin'
+            title: 'admin',
+            requiresAuth: true,
         },
         component: Admin,
     },
@@ -54,7 +57,8 @@ const routers = [
     {
         path:'/user/:id/profile/mail',
         meta: {
-            title: 'mail'
+            title: 'mail',
+            requiresAuth: true,
         },
         component: Mail,
     },

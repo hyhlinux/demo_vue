@@ -21,12 +21,16 @@ const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    next();
-    // if (window.localStorage.getItem('token')) {
-    //     next();
-    // }else {
-    //     next('/login');
-    // }
+    let token = window.localStorage.getItem('token');
+    if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null)) {
+        //该路由需要token
+        next({
+            path: '/login',
+            query: { redirect: to.fullPath }
+        });
+    } else {
+        next();
+    }
 });
 
 router.afterEach(() => {

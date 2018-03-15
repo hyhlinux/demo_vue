@@ -1,5 +1,6 @@
 <template>
-    <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+
+    <Form ref="formInline" :model="formInline" :rules="ruleInline" style="width: 300px">
         <FormItem prop="user">
             <Input type="text" v-model="formInline.username" placeholder="Username">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -61,17 +62,21 @@ import util from '../libs/util.js'
                         let _this = this;
                         util.ajax.post('/api/login', _this.formInline)
                         .then((response) => {
+                            console.log(response);
                             //状态码
                             //:   -2  用户不存在
                             //:   -1  用户名或密码不能为空
                             //:   0   用户名或密码错误
                             //:   1   登陆成功
-                            var ret = JSON.parse(response.data);
-                            _this.$Message.debug(ret.msg);
+                            // var ret = JSON.parse(response.data);
+                            var ret = response.data;
+                            // _this.$Message.debug(ret.msg);
                             switch(ret.status) {
                             case 0:
                                 break;
                             case 1:
+                                console.log(ret);
+                                _this.$Message.success('Success!');
                                 break;
                             case -1:
                                 _this.show = true;
@@ -91,7 +96,6 @@ import util from '../libs/util.js'
                             default:
                                 _this.$Message.info('登陆异常, 稍后重试');
                             }
-                            _this.$Message.success('Success!');
                         })
                         .catch(function(response) {
                             console.log(response);

@@ -74,7 +74,7 @@ class LoginView(HTTPMethodView):
                 # pass_first = hashlib.md5((CONFIG.WEBSITE["TOKEN"] + pwd).encode("utf-8")).hexdigest()
                 # password = hashlib.md5(pass_first.encode("utf-8")).hexdigest()
             if password == data.get('password'):
-                response = json({'status': 1, "msg": "用户登陆成功", "access_token": "123", "user_name": user_name})
+                response = json({'status': 1, "msg": "用户登陆成功", "token": "123", "user_name": user_name})
                 return response
             else:
                 return json({'status': 0, "msg": "用户名或密码错误"})

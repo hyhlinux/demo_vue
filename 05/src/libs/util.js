@@ -19,5 +19,6 @@ util.ajax = axios.create({
     baseURL: ajaxUrl,
     timeout: 30000
 });
+// util.ajax.options.emulateJSON = true;
 
 export default util;

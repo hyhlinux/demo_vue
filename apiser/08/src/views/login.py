@@ -7,14 +7,16 @@ from urllib.parse import parse_qs, unquote
 from sanic import Blueprint
 from sanic.response import html, json, text
 from sanic.views import HTTPMethodView
-from aiocache import cached, RedisCache
-from aiocache.serializers import JsonSerializer
 from pymongo import MongoClient
 
 try:
     from ujson import dumps as json_dumps
 except ImportError:
     from json import dumps as json_dumps
+
+
+from src.utils.tools import encry_pwd
+from src.utils import RET, error_map
 
 login_bp = Blueprint('login', url_prefix='api/login')
 enable_async = sys.version_info >= (3, 6)
@@ -46,40 +48,32 @@ class LoginView(HTTPMethodView):
         用户登录
         :param request:
         :return:
-        :   -2  用户不存在
-        :   -1  用户名或密码不能为空
-        :   0   用户名或密码错误
-        :   1   登陆成功
         """
-        login_data = None
-        user_name = None
-        password = None
-        try:
-            login_data = request.json
-            user_name = login_data.get('username', '')
-            password = login_data.get('password', '')
-        except Exception as e:
-            login_data = parse_qs(str(request.body, encoding='utf-8'))
-            user_name = login_data.get('username', [None])[0]
-            password = login_data.get('password', [None])[0]
-        finally:
-            print(login_data)
-        if user_name and password:
-            data = self.db.user.find_one({'username': user_name})
-            if not data:
-                # 先使用email字段
-                data = self.db.user.find_one({'email': user_name})
-            if not data:
-                return json({'status': -2, "msg": "用户还不存在，请去注册"})
-                # pass_first = hashlib.md5((CONFIG.WEBSITE["TOKEN"] + pwd).encode("utf-8")).hexdigest()
-                # password = hashlib.md5(pass_first.encode("utf-8")).hexdigest()
-            if password == data.get('password'):
-                response = json({'status': 1, "msg": "用户登陆成功", "token": "123", "user_name": user_name})
-                return response
-            else:
-                return json({'status': 0, "msg": "用户名或密码错误"})
+        if not request["data"]:
+            return json({'status': RET.PARAMERR, "msg": error_map[RET.PARAMERR]})
+
+        user_name = request.get("data",{}).get('user_name', None)
+        password = request.get("data",{}).get('password', None)
+        if not all([user_name, password]):
+            # 这种请求，前端不允许提交空数据
+            return json({'status': RET.PARAMERR, "msg": error_map[RET.PARAMERR]})
+
+        data = self.db.user.find_one({'username': user_name})
+        if not data:
+            return json({'status': RET.USERERR, "msg": error_map[RET.USERERR]})
+        password = encry_pwd(password)
+        if password == data.get('password'):
+            response = json(
+            {
+                'status': RET.OK,
+                "msg": "用户登陆成功",
+                "token": str(data.get("_id")),
+                "expires": datetime.datetime.now() + datetime.timedelta(days=30),
+                "user_name": user_name
+            })
+            return response
         else:
-            return json({'status': -1, "msg": "用户名或密码不能为空"})
+            return json({'status': RET.PWDERR, "msg": error_map[RET.PWDERR]})
 
     async def options(self, request):
         return text("ok")

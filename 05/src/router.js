@@ -3,6 +3,7 @@ import Admin from './views/admin.vue';
 import Home from './views/home.vue';
 import Mail from './views/mail.vue';
 import Login from './views/login.vue';
+import Register from './views/register.vue';
 import User from './views/user.vue';
 import UserProfile from './views/user_profile.vue';
 import UserProfileDef from './views/user_profile_def.vue';
@@ -68,6 +69,13 @@ const routers = [
             title: 'login'
         },
         component: Login,
+    },
+    {
+        path: '/register',
+        meta: {
+            title: 'register'
+        },
+        component: Register,
     },
 ];
 export default routers;

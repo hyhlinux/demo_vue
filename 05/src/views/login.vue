@@ -71,14 +71,13 @@ import util from '../libs/util.js'
                             // var ret = JSON.parse(response.data);
                             var ret = response.data;
                             // _this.$Message.debug(ret.msg);
+                            console.log(ret);
                             switch(ret.status) {
-                            case 0:
-                                break;
-                            case 1:
+                            case "0" || 0:
                                 console.log(ret);
                                 _this.$Message.success('Success!');
                                 break;
-                            case -1:
+                            case "4106":
                                 _this.show = true;
                                 _this.formInline = {
                                     userName: '',
@@ -87,7 +86,7 @@ import util from '../libs/util.js'
                                 };
                                 _this.createCode();
                                 break;
-                            case -2:
+                            case "4104":
                                 _this.show = false;
                                 _this.$router.push({
                                     name: 'register'

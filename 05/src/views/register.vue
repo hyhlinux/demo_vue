@@ -1,20 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Explore
- @hyhlinux
-Sign out
-1
-0 0 kufei88/vue-register
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
-vue-register/src/views/login.vue
-e52d3fa  on 11 Jan
-@kufei88 kufei88 2018-01-11
-     
-148 lines (136 sloc)  5.8 KB
 <style lang="less">
     @import './login.less';
 </style>
@@ -43,6 +26,7 @@ e52d3fa  on 11 Jan
                                 </span>
                             </Input>
                         </FormItem>
+                         
                         <FormItem prop="verifyCode">
                             <Input v-model="form.verifyCode" placeholder="请输入验证码">
                                 <span slot="prepend">
@@ -162,15 +146,3 @@ export default {
     width: 102px;
 }
 </style>
-© 2018 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About

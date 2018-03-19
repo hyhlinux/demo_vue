@@ -84,6 +84,7 @@ import util from '../libs/util.js'
                                     verifyCode: '',
                                 };
                                 _this.createCode();
+                                _this.$Message.error(ret.msg);
                                 break;
                             case "4104":
                                 _this.show = false;

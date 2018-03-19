@@ -46,6 +46,7 @@ import util from '../libs/util.js'
                     this.formInline.showConfirm = true;
                     callback(new Error('Please enter your password'));
                 } else {
+                    console.log(this.formInline);
                     if (this.formInline.passwdCheck !== '') {
                         // 对第二个密码框单独验证
                         // this.$refs.formInline.validateField('passwdCheck');
@@ -57,7 +58,7 @@ import util from '../libs/util.js'
                 if (value === '') {
                     this.formInline.showConfirm = true;
                     callback(new Error('Please enter your password again'));
-                } else if (value !== this.formInline.passwd) {
+                } else if (value !== this.formInline.password) {
                     callback(new Error('The two input passwords do not match!'));
                 } else {
                     this.formInline.showConfirm = false;

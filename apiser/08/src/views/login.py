@@ -44,34 +44,45 @@ class LoginView(HTTPMethodView):
         :param request:
         :return:
         """
-        if not request["data"]:
-            return json({'status': RET.PARAMERR, "msg": error_map[RET.PARAMERR]})
+        body = self.user_auth(request)
+        return json(body)
 
-        user_name = request.get("data",{}).get('user_name', None)
-        password = request.get("data",{}).get('password', None)
+    def user_auth(self, request):
+        def set_body(status=RET.OK, token=None, expires=None, user_name=None):
+            body = {}
+            body['status'] = status
+            body['msg'] = error_map.get(status, 'undefine')
+            if status == RET.OK:
+                body['token'] = token
+                body['expires'] = expires
+                body['user_name'] = user_name
+            return body
+
+        if not request["data"]:
+            return set_body(RET.PARAMERR)
+
+        user_name = request.get("data", {}).get('user_name', None)
+        password = request.get("data", {}).get('password', None)
         if not all([user_name, password]):
             # 这种请求，前端不允许提交空数据
-            return json({'status': RET.PARAMERR, "msg": error_map[RET.PARAMERR]})
+            return set_body(RET.PARAMERR)
 
         data = self.db.user.find_one({'username': user_name})
         if not data:
-            return json({'status': RET.USERERR, "msg": error_map[RET.USERERR]})
+            return set_body(RET.USERERR)
+
         password = encry_pwd(password)
-        if password == data.get('password'):
-            expires = datetime.datetime.now() + datetime.timedelta(minutes=1)
-            response = json(
-            {
-                'status': RET.OK,
-                "msg": "用户登陆成功",
-                "token": str(data.get("_id")),
-                "expires": int(expires.timestamp()*1000),
-                "user_name": user_name
-            })
-            return response
-        else:
-            return json({'status': RET.PWDERR, "msg": error_map[RET.PWDERR]})
+        if password != data.get('password'):
+            return set_body(RET.PWDERR)
+
+        # 成功
+        expires = datetime.datetime.now() + datetime.timedelta(minutes=1)
+        expires = int(expires.timestamp()*1000)
+        token = str(data.get("_id")),
+        return set_body(RET.OK, expires=expires, token=token, user_name=user_name)
 
     async def options(self, request):
         return text("ok")
+
 
 login_bp.add_route(LoginView.as_view(), '/', methods=['POST', 'OPTIONS'])

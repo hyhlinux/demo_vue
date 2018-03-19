@@ -64,10 +64,6 @@ import util from '../libs/util.js'
                         .then((response) => {
                             console.log(response);
                             //状态码
-                            //:   -2  用户不存在
-                            //:   -1  用户名或密码不能为空
-                            //:   0   用户名或密码错误
-                            //:   1   登陆成功
                             // var ret = JSON.parse(response.data);
                             var ret = response.data;
                             // _this.$Message.debug(ret.msg);
@@ -75,6 +71,9 @@ import util from '../libs/util.js'
                             switch(ret.status) {
                             case "0" || 0:
                                 console.log(ret);
+                                localStorage.setItem('token', ret.token);
+                                localStorage.setItem('expires', ret.expires);
+                                localStorage.setItem('user_name', ret.user_name);
                                 _this.$Message.success('Success!');
                                 break;
                             case "4106":

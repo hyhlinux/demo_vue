@@ -1,3 +1,3 @@
 from .tools import async_callback, singleton
 from .mid_decorator import response_handle, auth_params, authenticator
-from .secret import encry_pwd
+from .token import check_jwt, encry_pwd

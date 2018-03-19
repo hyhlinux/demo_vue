@@ -16,8 +16,7 @@ except ImportError:
     from json import dumps as json_dumps
 
 
-from src.utils.tools import encry_pwd
-from src.utils import RET, error_map
+from src.utils import RET, encry_pwd, error_map
 from src.config import CONFIG
 
 
@@ -51,13 +50,15 @@ class LoginView(HTTPMethodView):
         return json(body)
 
     def user_auth(self, request):
-        def set_body(status=RET.OK, token=None):
+        def set_body(status=RET.OK, token=None, expires=None, user_name=None):
             body = {}
             body['status'] = status
             body['msg'] = error_map.get(status, 'undefine')
             if status == RET.OK:
                 # jwt token playload 包含用户信息
                 body['token'] = token
+                body['expires'] = expires
+                body['user_name'] = user_name
             return body
 
         if not request["data"]:
@@ -89,7 +90,7 @@ class LoginView(HTTPMethodView):
         token = jwt.encode(payload=payload,
                            key=CONFIG.JWT.get('sercret', 'tplinux'),
                            algorithm=CONFIG.JWT.get('algorithm', 'HS256'))
-        return set_body(RET.OK, token=token)
+        return set_body(RET.OK, token=token, expires=expires, user_name=user_name)
 
     async def options(self, request):
         return text("ok")

@@ -1,14 +1,23 @@
 import time
+import hashlib
 import jwt
 import datetime
 try:
     from src.config import CONFIG
 except ImportError:
     class CONFIG:
+        WEBSITE = dict(
+            TOKEN='owllook',
+        )
         JWT = {
             "sercret": 'tplinux',
             "algorithm": 'HS256'
         }
+
+
+def encry_pwd(pwd=""):
+    new_pwd = hashlib.md5((CONFIG.WEBSITE["TOKEN"] + pwd).encode("utf-8")).hexdigest()
+    return new_pwd
 
 
 def check_jwt(token=None):

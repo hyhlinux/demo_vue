@@ -12,7 +12,7 @@ from src.config import CONFIG
 from src.views import contanct_bp
 from src.views import register_bp
 from src.views import login_bp
-
+from src.utils import check_jwt
 
 
 
@@ -22,20 +22,6 @@ app.blueprint(contanct_bp)
 app.blueprint(register_bp)
 app.blueprint(login_bp)
 
-def check_jwt(token=None):
-    if not token:
-        return False, None
-
-    try:
-        data = jwt.decode(token, CONFIG.JWT.get('sercret', 'tplinux'),
-                algorithms=CONFIG.JWT.get('algorithm', 'HS256'))
-        return True, data
-    except jwt.ExpiredSignatureError as e:
-        print('token获取，请刷新token: {}'.format(e))
-        return False, dict(msg="".format(e))
-    except jwt.DecodeError as e:
-        print('token解码失败: {} \ntoken:{}'.format(e, token))
-        return False, dict(msg="".format(e))
 
 @app.middleware('request')
 async def post_on_request(request):

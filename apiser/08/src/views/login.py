@@ -38,11 +38,6 @@ class LoginView(HTTPMethodView):
     Client = MongoClient()
     db = Client['owllook']
 
-    # async def get(self, request):
-    #     # contants = await self.get_contanct()
-    #     # return json(contants)
-    #     return text('请去登陆')
-
     async def post(self, request):
         """
         用户登录
@@ -63,12 +58,13 @@ class LoginView(HTTPMethodView):
             return json({'status': RET.USERERR, "msg": error_map[RET.USERERR]})
         password = encry_pwd(password)
         if password == data.get('password'):
+            expires = datetime.datetime.now() + datetime.timedelta(minutes=1)
             response = json(
             {
                 'status': RET.OK,
                 "msg": "用户登陆成功",
                 "token": str(data.get("_id")),
-                "expires": datetime.datetime.now() + datetime.timedelta(days=30),
+                "expires": int(expires.timestamp()*1000),
                 "user_name": user_name
             })
             return response

@@ -20,6 +20,11 @@ app.blueprint(login_bp)
 
 @app.middleware('request')
 async def post_on_request(request):
+    """
+    处理post 中form与json数据，保存至request['data']
+    :param request:
+    :return:
+    """
     try:
         user_name = request.json.get('username', '')
         password = request.json.get('password', '')

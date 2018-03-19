@@ -71,16 +71,9 @@ import util from '../libs/util.js'
                             console.log(ret, redirect);
                             switch(ret.status) {
                             case "0" || 0:
-                                console.log(ret);
-                                localStorage.setItem('token', ret.token);
-                                localStorage.setItem('expires', ret.expires);
-                                localStorage.setItem('user_name', ret.user_name);
+                                _this.saveData(ret);
                                 _this.$Message.success('Success!');
-                                if(redirect !=='/login' && redirect !=='' && !!redirect) {
-                                    this.$router.push(redirect)
-                                } else {
-                                    this.$router.push({path:'/'})
-                                }
+                                _this.redirect(redirect); 
                                 break;
                             case "4106":
                                 _this.show = true;
@@ -112,11 +105,26 @@ import util from '../libs/util.js'
                     }
                 })
             },
+            redirect(redirect) {
+                if(redirect !=='/login' && redirect !=='' && !!redirect) {
+                    this.$router.push(redirect)
+                } else {
+                    this.$router.push({path:'/'})
+                }
+            },
+            saveData(ret) {
+                if (ret) {
+                    localStorage.setItem('token', ret.token);
+                    localStorage.setItem('expires', ret.expires);
+                    localStorage.setItem('user_name', ret.user_name);
+                }
+            },
             createCode(){
                 let code = "";    
                 var codeLength = 4;//验证码的长度   
-                var random = new Array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R',   
-           'S','T','U','V','W','X','Y','Z');//随机数   
+                var random = new Array(0,1,2,3,4,5,6,7,8,9,
+                'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R',   
+                'S','T','U','V','W','X','Y','Z');//随机数   
                 for(var i = 0; i < codeLength; i++) {//循环操作   
                     var index = Math.floor(Math.random()*36);//取得随机数的索引（0~35）   
                     code += random[index];//根据索引取得随机数加到code上   

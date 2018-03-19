@@ -49,7 +49,6 @@ async def post_on_request(request):
     if not check_token and request.path not in ('/api/register', '/api/login'):
         return json({}, status=403)
 
-    print('data:', user_info)
     try:
         user_name = request.json.get('username', '')
         password = request.json.get('password', '')

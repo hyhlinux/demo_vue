@@ -67,7 +67,8 @@ import util from '../libs/util.js'
                             // var ret = JSON.parse(response.data);
                             var ret = response.data;
                             // _this.$Message.debug(ret.msg);
-                            console.log(ret);
+                            let redirect = this.$route.query.redirect;
+                            console.log(ret, redirect);
                             switch(ret.status) {
                             case "0" || 0:
                                 console.log(ret);
@@ -75,6 +76,11 @@ import util from '../libs/util.js'
                                 localStorage.setItem('expires', ret.expires);
                                 localStorage.setItem('user_name', ret.user_name);
                                 _this.$Message.success('Success!');
+                                if(redirect !=='/login' && redirect !=='' && !!redirect) {
+                                    this.$router.push(redirect)
+                                } else {
+                                    this.$router.push({path:'/'})
+                                }
                                 break;
                             case "4106":
                                 _this.show = true;

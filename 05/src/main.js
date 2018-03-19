@@ -1,4 +1,5 @@
 import Vue from 'vue';
+// import jwt from 'jsonwebtoken';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 import Routers from './router';
@@ -23,7 +24,7 @@ router.beforeEach((to, from, next) => {
     Util.title(to.meta.title);
     let token = window.localStorage.getItem('token');
     // API ser: 设定的时间，为未来的过期时间点
-    let expires = parseInt(window.localStorage.getItem('exp'))*1000 || 0;  
+    let expires = parseInt(window.localStorage.getItem('expires'))*1000 || 0;  
     let curTime = new Date().getTime(); //毫秒
     if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null || curTime > expires))  {
         //该路由需要token

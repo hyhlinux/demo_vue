@@ -38,13 +38,15 @@
                 </h1>
                 <h2>
                     <p>Welcome to your iView app!</p>
-                    <router-link to="/admin">admin</router-link>
+                    <router-link to="/admin" name="admin">admin</router-link>
                     <br>
-                    <router-link to="/login">login</router-link>
+                    <router-link to="/register" name="register">register</router-link>
                     <br>
-                    <router-link to="/user/foo">user</router-link>
+                    <router-link to="/login" name="login">login</router-link>
                     <br>
-                    <router-link to="/user/foo/profile">profile</router-link>
+                    <router-link to="/user" name="user">user</router-link>
+                    <br>
+                    <router-link to="/setting" name="setting">setting</router-link>
                     <br>
                     <Button type="ghost" @click="handleStart">Start iView</Button>
                 </h2>

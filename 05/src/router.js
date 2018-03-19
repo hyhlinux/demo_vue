@@ -33,36 +33,13 @@ const routers = [
         component: Admin,
     },
     // {
-    //     path: '/user/:id',
+    //     path:'/user/:id/profile/mail',
     //     meta: {
-    //         title: 'user'
+    //         title: 'mail',
+    //         requiresAuth: true,
     //     },
-    //     component: User,
-    //     children: [
-    //         {
-    //             path: '',
-    //             component: UserProfileDef
-    //         },
-    //         {
-    //             path: 'profile',
-    //             component: UserProfile,
-    //             children: [
-    //                 {
-    //                     path: 'mail',
-    //                     component: Mail,
-    //                 }
-    //             ]
-    //         }
-    //     ]
+    //     component: Mail,
     // },
-    {
-        path:'/user/:id/profile/mail',
-        meta: {
-            title: 'mail',
-            requiresAuth: true,
-        },
-        component: Mail,
-    },
     {
         path: '/login',
         meta: {

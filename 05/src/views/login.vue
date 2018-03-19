@@ -87,9 +87,7 @@ import util from '../libs/util.js'
                                 break;
                             case "4104":
                                 _this.show = false;
-                                _this.$router.push({
-                                    name: 'register'
-                                });
+                                _this.$router.push({ path: '/register'});
                                 break;
                             default:
                                 _this.$Message.info('登陆异常, 稍后重试');

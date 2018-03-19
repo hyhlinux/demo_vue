@@ -1,9 +1,15 @@
 <template>
-
     <Form ref="formInline" :model="formInline" :rules="ruleInline" style="width: 300px">
         <FormItem prop="user">
             <Input type="text" v-model="formInline.username" placeholder="Username">
                 <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+        </FormItem>
+        <FormItem prop="email">
+            <Input type="text" v-model="formInline.email" placeholder="xx@[163|qq|*].com">
+                <span slot="prepend">
+                    <Icon :size="14" type="ios-email"></Icon>
+                </span>
             </Input>
         </FormItem>
         <FormItem prop="password">
@@ -11,16 +17,23 @@
                 <Icon type="ios-locked-outline" slot="prepend"></Icon>
             </Input>
         </FormItem>
+      <FormItem prop="passwdCheck" v-show="formInline.showConfirm">
+            <Input type="password" v-model="formInline.passwdCheck" placeholder="passwdCheck">
+                <span slot="prepend">
+                    <Icon :size="14" type="ios-checkmark"></Icon>
+                </span>
+            </Input>
+        </FormItem>
         <FormItem prop="verifyCode">
-                <Input v-model="formInline.verifyCode" placeholder="请输入验证码">
-                    <span slot="prepend">
+            <Input v-model="formInline.verifyCode" placeholder="请输入验证码">
+                <span slot="prepend">
                     <Icon :size="14" type="lock-combination"></Icon>
-                    </span>
-                    <Button slot="append" @click="createCode">{{checkCode}}</Button>
-                </Input>
+                </span>
+                <Button slot="append" @click="createCode">{{checkCode}}</Button>
+            </Input>
         </FormItem>
         <FormItem>
-            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+            <Button type="primary" @click="handleSubmit('formInline')">Sinup</Button>
         </FormItem>
     </Form>
 </template>
@@ -28,20 +41,57 @@
 import util from '../libs/util.js'
     export default {
         data () {
+            const validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    this.formInline.showConfirm = true;
+                    callback(new Error('Please enter your password'));
+                } else {
+                    if (this.formInline.passwdCheck !== '') {
+                        // 对第二个密码框单独验证
+                        // this.$refs.formInline.validateField('passwdCheck');
+                    }
+                    callback();
+                }
+            };
+            const validatePassCheck = (rule, value, callback) => {
+                if (value === '') {
+                    this.formInline.showConfirm = true;
+                    callback(new Error('Please enter your password again'));
+                } else if (value !== this.formInline.passwd) {
+                    callback(new Error('The two input passwords do not match!'));
+                } else {
+                    this.formInline.showConfirm = false;
+                    callback();
+                }
+            };
+            const validateEmail = (rule, vlaue, callback) => {
+
+            };
             return {
                 formInline: {
+                    showConfirm: true,
                     username: '',
+                    email: '',
                     password: '',
+                    passwdCheck: '',
                     verifyCode: ''
                 },
                 checkCode:'',
                 ruleInline: {
                     username: [
-                        { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                        { required: true, message: 'Please fill in the user name', trigger: 'blur' },
+                        { type: 'string', min: 4, message: 'The username length cannot be less than 4 bits', trigger: 'blur' }
+                    ],
+                    email: [
+                        { required: true, message: 'Please fill in the user email', trigger: 'blur' },
+                        { validator: validateEmail, trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-                        { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                       { validator: validatePass, trigger: 'blur' },
+                       { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                    ],
+                    passwdCheck: [
+                        { validator: validatePassCheck, trigger: 'blur' }
                     ],
                     verifyCode: [
                         { required: true, message: '验证码不能为空', trigger: 'blur' }
@@ -60,7 +110,7 @@ import util from '../libs/util.js'
                         }
 
                         let _this = this;
-                        util.ajax.post('/api/login', _this.formInline)
+                        util.ajax.post('/api/register', _this.formInline)
                         .then((response) => {
                             console.log(response);
                             //状态码

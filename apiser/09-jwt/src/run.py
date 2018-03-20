@@ -32,7 +32,7 @@ async def post_on_request(request):
     """
     token = request.headers.get('token', '') or request.args.get('token', '')
     check_token, user_info = check_jwt(token)
-    if not check_token and request.path[:6] not in CONFIG.WHITE_PATH:
+    if not check_token and request.path not in CONFIG.WHITE_PATH:
         return json({}, status=403)
 
     try:

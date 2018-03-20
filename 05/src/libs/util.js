@@ -35,11 +35,16 @@ util.createCode = function() {
 };
 
 util.saveData = function(ret) {
+    //api ser 返回的状态
     if (ret) {
         localStorage.setItem('token', ret.token);
         localStorage.setItem('expires', ret.expires);
         localStorage.setItem('user_name', ret.user_name);
     }
+};
+util.isEmail = function(email) {
+    let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/; 
+    return reg.test(email); 
 };
 
 export default util;

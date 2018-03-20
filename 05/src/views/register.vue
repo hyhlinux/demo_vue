@@ -66,8 +66,24 @@ import util from '../libs/util.js'
                 }
             };
             const validateEmail = (rule, vlaue, callback) => {
+                // let isEmail = util.isEmail(value);
                 console.log(vlaue);
                 callback();
+                // if (!isEmail)  {
+                //     callback(new Error('Please enter your isEmail again'));
+                // }else{
+                //     callback();
+                // }
+            };
+            const validateCode = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('Please enter Verification code'));
+                } else if (this.formInline.verifyCode.toUpperCase()!= this.checkCode.toUpperCase()) {
+                    callback(new Error('The two input passwords do not match!'));
+                } else {
+                    this.formInline.showConfirm = false;
+                    callback();
+                }
             };
             return {
                 formInline: {
@@ -81,22 +97,21 @@ import util from '../libs/util.js'
                 checkCode:'',
                 ruleInline: {
                     username: [
-                        { required: true, message: 'Please fill in the user name', trigger: 'blur' },
+                        { required: true, message: 'Please fill in the user name'},
                         { type: 'string', min: 4, message: 'The username length cannot be less than 4 bits', trigger: 'blur' }
                     ],
                     email: [
-                        { required: true, message: 'Please fill in the user email', trigger: 'blur' },
-                        { validator: validateEmail, trigger: 'blur' }
+                        { required: true, type: 'string', message: 'Please fill in the user email'},
                     ],
                     password: [
+                       { requied: true, type: 'string', min: 6, message: 'The password length cannot be less than 6 bits'},
                        { validator: validatePass, trigger: 'blur' },
-                       { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
                     ],
                     passwdCheck: [
-                        { validator: validatePassCheck, trigger: 'blur' }
+                        { validator: validatePassCheck, trigger: 'blur', min: 6}
                     ],
                     verifyCode: [
-                        { required: true, message: '验证码不能为空', trigger: 'blur' }
+                       { validator: validateCode, trigger: 'blur', min: 4}
                     ]
                 }
             }

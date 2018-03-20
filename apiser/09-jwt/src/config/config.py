@@ -18,3 +18,7 @@ class Config(object):
         "sercret": 'tplinux',
         "algorithm": "HS256",
     }
+    WHITE_PATH = {
+        "/api/register": True,
+        "/api/login": True,
+    }

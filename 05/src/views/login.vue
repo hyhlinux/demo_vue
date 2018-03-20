@@ -1,28 +1,32 @@
 <template>
-
-    <Form ref="formInline" :model="formInline" :rules="ruleInline" style="width: 300px">
-        <FormItem prop="user">
-            <Input type="text" v-model="formInline.username" placeholder="Username">
-                <Icon type="ios-person-outline" slot="prepend"></Icon>
-            </Input>
-        </FormItem>
-        <FormItem prop="password">
-            <Input type="password" v-model="formInline.password" placeholder="Password">
-                <Icon type="ios-locked-outline" slot="prepend"></Icon>
-            </Input>
-        </FormItem>
-        <FormItem prop="verifyCode">
+    <Card style="width:400px">
+        <div style="text-align:center">
+            <img src="https://raw.githubusercontent.com/iview/iview/master/assets/logo.png">
+        </div>
+        <Form ref="formInline" :model="formInline" :rules="ruleInline" style="width: 300px">
+            <FormItem prop="user">
+                <Input type="text" v-model="formInline.username" placeholder="Username">
+                    <Icon type="ios-person-outline" slot="prepend"></Icon>
+                </Input>
+            </FormItem>
+            <FormItem prop="password">
+                <Input type="password" v-model="formInline.password" placeholder="Password">
+                    <Icon type="ios-locked-outline" slot="prepend"></Icon>
+                </Input>
+            </FormItem>
+            <FormItem prop="verifyCode">
                 <Input v-model="formInline.verifyCode" placeholder="请输入验证码">
                     <span slot="prepend">
                     <Icon :size="14" type="lock-combination"></Icon>
                     </span>
                     <Button slot="append" @click="createCode">{{checkCode}}</Button>
                 </Input>
-        </FormItem>
-        <FormItem>
-            <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
-        </FormItem>
-    </Form>
+            </FormItem>
+            <FormItem>
+                <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+            </FormItem>
+        </Form>
+    </Card>
 </template>
 <script>
 import util from '../libs/util.js'

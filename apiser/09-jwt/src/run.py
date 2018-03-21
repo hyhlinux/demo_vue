@@ -1,6 +1,7 @@
 import sys
 import jwt
 from sanic import Sanic
+from sanic.log import logger
 from sanic.response import json
 from urllib.parse import parse_qs
 from sanic_cors import CORS
@@ -9,12 +10,10 @@ from pymongo import MongoClient
 
 sys.path.append('../')
 from src.config import CONFIG
+from src.utils import check_token, new_sec_secret
 from src.views import contanct_bp
 from src.views import register_bp
 from src.views import login_bp
-from src.utils import check_jwt
-
-
 
 app = Sanic()
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -30,40 +29,48 @@ async def post_on_request(request):
     :param request:
     :return:
     """
-    token = request.headers.get('token', '') or request.args.get('token', '')
-    check_token, user_info = check_jwt(token)
-    if not check_token and request.path not in CONFIG.WHITE_PATH:
-        return json({}, status=403)
+    user_info = None
+    if request.path not in CONFIG.WHITE_PATH:
+        token = request.headers.get('token', '') or request.args.get('token', '')
+        # uid 每一个用户不同，保证jwt的secret均不同，保证安全性.
+        uid = request.headers.get('uid', '') or request.args.get('uid', '')
+        check, user_info = check_token(token, key=new_sec_secret(uid))
+        if not check:
+            return json(user_info, status=403)
+    else:
+        pass
 
     try:
         user_name = request.json.get('username', '')
         password = request.json.get('password', '')
         user_email = request.json.get('email', '')
+        phone = request.json.get('phone', '')
         # 头信息获取token
     except Exception as e:
+        logger.warning("Not Json {}".format(e))
         form_data = parse_qs(str(request.body, encoding='utf-8'))
+        # todo instead  username by email
         user_name = form_data.get('username', [None])[0]
         password = form_data.get('password', [None])[0]
         user_email = form_data.get('email', [None])[0]
+        phone = form_data.get('phone', [None])[0]
     finally:
         request["data"] = dict(
             user_name=user_name,
             password=password,
             user_info=user_info,
-            user_email=user_email)
-    print("I print when a request is received by the server:", request["data"])
-
-@app.middleware('response')
-async def print_on_response(request, response):
-    print("I print when a response is returned by the server", response)
+            phone=phone,
+            email=user_email
+        )
+    logger.debug("I print when a request is received by the server:{} {}".format(request["data"], id(request.app)))
 
 @app.listener('after_server_start')
 async def notify_server_started(app, loop):
-    print('Server successfully started!')
+    logger.debug('Server successfully started!')
 
 @app.listener('before_server_stop')
 async def notify_server_stopping(app, loop):
-    print('Server shutting down!')
+    logger.error('Server shutting down!')
 
 
 @app.route("/")

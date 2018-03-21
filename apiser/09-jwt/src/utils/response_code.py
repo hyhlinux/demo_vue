@@ -24,7 +24,7 @@ error_map = {
     RET.OK                    : u"成功",
     RET.DBERR                 : u"数据库查询错误",
     RET.NODATA                : u"无数据",
-    RET.DATAEXIST             : u"数据已存在",
+    RET.DATAEXIST             : u"数据(邮件)已存在, 请登陆",
     RET.DATAERR               : u"数据错误",
     RET.SESSIONERR            : u"用户未登录",
     RET.LOGINERR              : u"用户登录失败",

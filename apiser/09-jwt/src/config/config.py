@@ -15,8 +15,11 @@ class Config(object):
     # Application config
     DEBUG = False
     JWT = {
+        "salt": "+-*/.",
         "sercret": 'tplinux',
         "algorithm": "HS256",
+        "payload_pre": "++",
+        "payload_end": "--",
     }
     WHITE_PATH = {
         "/api/register": True,

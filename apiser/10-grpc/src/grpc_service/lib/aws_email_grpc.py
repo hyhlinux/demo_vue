@@ -6,7 +6,7 @@ import abc
 import grpclib.const
 import grpclib.client
 
-import aws_email_pb2
+from . import aws_email_pb2
 
 
 class EmailServiceBase(abc.ABC):

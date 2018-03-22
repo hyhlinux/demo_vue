@@ -12,6 +12,7 @@ except ImportError:
 
 from src.model import User
 from src.utils import RET, encry_pwd, new_token, error_map, new_sec_secret
+from src.grpc_service import SendMail
 
 register_bp = Blueprint('register', url_prefix='api/register')
 
@@ -60,11 +61,13 @@ class RegisterView(HTTPMethodView):
             payload = dict(uid=uid)
             token = new_token(payload, new_sec_secret(uid))
             #send
+            # ret = await SendMail(to=user_email, body='<a href="www.baidu.com">请激活</a>')
             print("发送激活邮件")
             return set_body(RET.OK, token, uid=str(user.id))
         except Exception as e:
+            logger.warning(e)
             except_body = set_body(RET.SERVERERR)
-            except_body["msg"] = "{} excpetion:{}".format(body.get("msg", ""), e)
+            except_body["msg"] = "{} excpetion:{}".format(except_body.get("msg", ""), e)
             return except_body
 
     @classmethod

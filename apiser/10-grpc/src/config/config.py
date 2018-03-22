@@ -25,3 +25,6 @@ class Config(object):
         "/api/register": True,
         "/api/login": True,
     }
+    GRPC_EMAIL_LISTEN_ADDR = "0.0.0.0:5005"
+    GRPC_SERVER_SLEEP_SECONDS = 60 * 60 * 24
+    GRPC_THREAD_POOLS_MAX_WORKERS = 1024

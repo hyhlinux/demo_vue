@@ -13,14 +13,19 @@ from src.config import CONFIG
 from src.utils import check_token, new_sec_secret
 from src.views import contanct_bp
 from src.views import register_bp
-from src.views import login_bp
+from src.views import login_bp, token_bp
 
 app = Sanic()
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.blueprint(contanct_bp)
 app.blueprint(register_bp)
 app.blueprint(login_bp)
-
+app.blueprint(token_bp)
+ # Client = MongoClient()
+ # db = Client['owllook']
+app.db = dict(
+    mongo=MongoClient()['sanic']
+)
 
 @app.middleware('request')
 async def post_on_request(request):

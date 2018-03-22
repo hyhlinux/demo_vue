@@ -19,6 +19,7 @@ class Config(object):
         "sercret": 'tplinux',
         "algorithm": "HS256",
         "payload_pre": "++",
+        "exp": 30,
         "payload_end": "--",
     }
     WHITE_PATH = {

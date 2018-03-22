@@ -18,6 +18,7 @@ except ImportError:
             "sercret": 'tplinux',
             "payload_pre": "++",
             "payload_end": "--",
+            "exp": 30,
             "algorithm": 'HS256'
         }
 
@@ -83,7 +84,7 @@ def new_token(payload={}, key=None):
     else:
        sec_payload = payload
     if isinstance(sec_payload, dict) and not sec_payload.get('exp', None):
-        expires = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        expires = datetime.datetime.now() + datetime.timedelta(minutes=CONFIG.JWT.get("exp", 5))
         # jwt 解码需要s
         expires = int(expires.timestamp())
         sec_payload['exp'] = expires

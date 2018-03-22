@@ -34,14 +34,15 @@ async def SendMail(to, body):
     return await stub.SendMail(req)
 
 async def main():
-    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI1YWIzNzI4OGM0Y2Q3NDMyM2E3NjBjNGEiLCJleHAiOjE1MjE3MDk4MjR9.K7iIpm_WeLS-Xr9rcjvzfNxYPdRGk0o440ZE2NbXm7U"
+    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI1YWIzNzU5OGM0Y2Q3NDMzYWRiMGQyNTYiLCJleHAiOjE1MjE3MTIyODh9.-Wzw3VZNTepyC49mAOkf3j285e7KuL2zTqS4eHtipjo"
+    uid = "5ab37598c4cd7433adb0d256"
     htmlBody = """
     Welcome Apkpure:
-         <a href="http://192.168.0.96:8000/api/token?token={}">请激活</a>>
+         <a href="http://192.168.0.96:8000/api/token?token={}&uid={}">请激活</a>>
     """""
-    htmlBody = htmlBody.format(token)
-    resp = await SendMail("hyhlinux@163.com", body=htmlBody)
-    print(resp)
+    htmlBody = htmlBody.format(token, uid)
+    # resp = await SendMail("hyhlinux@163.com", body=htmlBody)
+    print(htmlBody)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option java_package = "com.apkpure.proto";
+option java_outer_classname = "EmailService";
+
+package protos;
+
+// for grpc-gateway
+//#gw#import "google/api/annotations.proto";
+
+/**
+* aws-sdk-go 调用sendmail
+*/
+service EmailService {
+
+    /// 发送邮件 
+    rpc SendMail (EmailRequest) returns (EmailResponse) {
+    //#gw#  option (google.api.http) = {
+    //#gw#  post: "/v1/email/sendmail"
+    //#gw#  body: "*"
+    //#gw#  };
+    }
+}
+
+
+message EmailRequest {
+    string from = 1;                /// 发件人
+    string to = 2;                  /// 收件人
+    repeated string cc = 3;         /// 抄送列表
+    string subject = 4;             /// 话题
+    string charset = 5;             /// 编码, 默认为UTF-8
+    string textBody = 6;            /// 发送text邮件
+    string htmlBody = 7;            /// 发送html邮件, 通常设置一个即可
+}
+
+
+message EmailResponse {
+    string messageId = 1;           /// 邮件从aws发送成功会返回一串数字，如"01000...."
+}
+

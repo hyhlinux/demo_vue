@@ -4,11 +4,13 @@
             <img src="https://raw.githubusercontent.com/iview/iview/master/assets/logo.png">
         </div>
         <Form ref="formInline" :model="formInline" :rules="ruleInline" style="width: 300px">
-            <FormItem prop="user">
-                <Input type="text" v-model="formInline.username" placeholder="Username">
-                    <Icon type="ios-person-outline" slot="prepend"></Icon>
-                </Input>
-            </FormItem>
+         <FormItem prop="email">
+            <Input type="text" v-model="formInline.email" placeholder="xx@[163|qq|*].com">
+                <span slot="prepend">
+                    <Icon :size="14" type="ios-email"></Icon>
+                </span>
+            </Input>
+        </FormItem>
             <FormItem prop="password">
                 <Input type="password" v-model="formInline.password" placeholder="Password">
                     <Icon type="ios-locked-outline" slot="prepend"></Icon>
@@ -32,16 +34,26 @@
 import util from '../libs/util.js'
     export default {
         data () {
+            const validateEmail = (rule, vlaue, callback) => {
+                // let isEmail = util.isEmail(value);
+                console.log(vlaue);
+                callback();
+                // if (!isEmail)  {
+                //     callback(new Error('Please enter your isEmail again'));
+                // }else{
+                //     callback();
+                // }
+            };
             return {
                 formInline: {
-                    username: '',
+                    email: '',
                     password: '',
                     verifyCode: ''
                 },
                 checkCode:'',
                 ruleInline: {
-                    username: [
-                        { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                    email: [
+                        { required: true, type: 'string', message: 'Please fill in the user email'},
                     ],
                     password: [
                         { required: true, message: 'Please fill in the password.', trigger: 'blur' },

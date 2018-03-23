@@ -71,7 +71,7 @@ class RegisterView(HTTPMethodView):
             """
             msg = msg.format(token_url)
             print("发送激活邮件\n", msg)
-            await Zemail.sendEmail(to=user_email, msg=msg)
+            Zemail.sendEmail(to=user_email, msg=msg)
             return set_body(RET.OK, token, uid=str(user.id))
         except Exception as e:
             logger.warning(e)

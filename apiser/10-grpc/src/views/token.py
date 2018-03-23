@@ -61,7 +61,7 @@ class TokenView(HTTPMethodView):
         except Exception as e:
             logger.warning(e)
             except_body = set_body(RET.SERVERERR)
-            except_body["msg"] = "{} excpetion:{}".format(except_body.get("msg", ""), e)
+            except_body["msg"] = "查无此用户， {} excpetion:{}".format(except_body.get("msg", ""), e)
             return except_body
 
     @classmethod

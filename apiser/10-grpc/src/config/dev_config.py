@@ -24,3 +24,7 @@ class DevConfig(Config):
         MONGO_PASSWORD=os.getenv('MONGO_PASSWORD', ""),
         DATABASE='owllook',
     )
+    EMAIL = {
+           "user": os.getenv('EMAIL_USER', ""),
+            "passwd": os.getenv("EMAIL_USER_PASSWD", ""),
+    }

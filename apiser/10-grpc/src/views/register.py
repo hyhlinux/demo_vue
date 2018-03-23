@@ -4,6 +4,7 @@ from sanic import Blueprint
 from sanic.response import json, text
 from sanic.log import logger
 from sanic.views import HTTPMethodView
+from urllib import parse
 
 try:
     from ujson import dumps as json_dumps
@@ -11,7 +12,7 @@ except ImportError:
     from json import dumps as json_dumps
 
 from src.model import User
-from src.utils import RET, encry_pwd, new_token, error_map, new_sec_secret
+from src.utils import RET, encry_pwd, new_token, error_map, new_sec_secret, Zemail
 
 register_bp = Blueprint('register', url_prefix='api/register')
 
@@ -61,7 +62,16 @@ class RegisterView(HTTPMethodView):
             token = new_token(payload, new_sec_secret(uid))
             #send
             # ret = await SendMail(to=user_email, body='<a href="www.baidu.com">请激活</a>')
-            print("发送激活邮件")
+            token_url = r'http://192.168.0.96:8000/api/token?'
+            query = parse.urlencode(dict(token=token, uid=uid))
+            token_url = "{}{}".format(token_url, query)
+            msg = """
+            <h2>TES<h2>
+            <a href="{}">请激活</a>
+            """
+            msg = msg.format(token_url)
+            print("发送激活邮件\n", msg)
+            await Zemail.sendEmail(to=user_email, msg=msg)
             return set_body(RET.OK, token, uid=str(user.id))
         except Exception as e:
             logger.warning(e)

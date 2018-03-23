@@ -62,7 +62,7 @@ class RegisterView(HTTPMethodView):
             token = new_token(payload, new_sec_secret(uid))
             #send
             # ret = await SendMail(to=user_email, body='<a href="www.baidu.com">请激活</a>')
-            token_url = r'http://192.168.0.96:8000/api/token?'
+            token_url = r'http://47.91.255.0:8000/api/token?'
             query = parse.urlencode(dict(token=token, uid=uid))
             token_url = "{}{}".format(token_url, query)
             msg = """

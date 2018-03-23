@@ -12,7 +12,6 @@ except ImportError:
 
 from src.model import User
 from src.utils import RET, encry_pwd, new_token, error_map, new_sec_secret
-from src.grpc_service import SendMail
 
 register_bp = Blueprint('register', url_prefix='api/register')
 

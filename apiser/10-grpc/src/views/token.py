@@ -10,7 +10,6 @@ try:
 except ImportError:
     from json import dumps as json_dumps
 
-from src.model import User
 from src.utils import RET, encry_pwd, new_token, error_map, new_sec_secret
 from src.model import User
 # 激活用户

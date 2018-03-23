@@ -11,13 +11,11 @@ from pymongo import MongoClient
 sys.path.append('../')
 from src.config import CONFIG
 from src.utils import check_token, new_sec_secret
-from src.views import contanct_bp
 from src.views import register_bp
 from src.views import login_bp, token_bp
 
 app = Sanic()
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-app.blueprint(contanct_bp)
 app.blueprint(register_bp)
 app.blueprint(login_bp)
 app.blueprint(token_bp)
@@ -54,6 +52,7 @@ async def post_on_request(request):
     except Exception as e:
         logger.warning("Not Json {}".format(e))
         form_data = parse_qs(str(request.body, encoding='utf-8'))
+        # form_data = request.parsed_form
         # todo instead  username by email
         user_name = form_data.get('username', [None])[0]
         password = form_data.get('password', [None])[0]

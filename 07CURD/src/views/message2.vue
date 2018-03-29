@@ -2,6 +2,7 @@
     <Table border :columns="columns7" :data="data"></Table>
 </template>
 <script>
+import util from '../libs/util.js'
     export default {
         data () {
             return {
@@ -22,7 +23,17 @@
                     },
                     {
                         title: 'ToUserId',
-                        key: 'toUserId'
+                        key: 'toUserId',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Icon', {
+                                    props: {
+                                        type: 'person'
+                                    }
+                                }),
+                                h('strong', params.row.fromUserId)
+                            ]);
+                        }
                     },
                     {
                         title: 'Status',
@@ -39,14 +50,14 @@
                         }
                     },
                     {
-                        title: 'Title',
-                        key: 'title'
-                    },
-                    {
                         title: 'Date',
                         key: 'date',
                         sortable: true,
                     },
+                    // {
+                    //     title: 'Title',
+                    //     key: 'title'
+                    // },
                     // {
                     //     title: 'Text',
                     //     key: 'text'
@@ -87,6 +98,9 @@
                         }
                     }
                 ],
+                queryData: {
+
+                },
                 data: [
                     {
                         id: 1,
@@ -112,6 +126,15 @@
         methods: {
             getMessages() {
                 console.log("API GET Message list");
+                let _this = this;
+                util.ajax.post('/api/message', _this.queryData)
+                .then((response) => {
+
+                })
+                .catch(function(response) {
+                    console.log("获取消息失败");
+                    console.log(response);
+                }) 
             },
             show (index) {
                 let status = this.data[index].status;
@@ -124,7 +147,7 @@
                 console.log('API mesage Update: ', this.data[index].status, 'Id:', this.data[index].id);
             },
             remove (index) {
-                console.log('API REMOVE');
+                console.log('API REMOVE: fake delete');
                 this.data.splice(index, 1);
             }
         },

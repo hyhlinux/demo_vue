@@ -38,6 +38,17 @@ class MyMessage(Document):
 
 ```
 ###### 2.1 find
+```js
+    util.ajax.post('/api/message', _this.queryData)
+    .then((response) => {
+        console.log(response);
+        _this.data = response.data;
+    })
+    .catch(function(response) {
+        console.log("获取消息失败");
+        console.log(response);
+    }) 
+```
 ###### 2.2 insert
 ###### 2.3 update
 ###### 2.4 remove->update isDelete True

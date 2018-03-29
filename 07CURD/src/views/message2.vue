@@ -129,7 +129,8 @@ import util from '../libs/util.js'
                 let _this = this;
                 util.ajax.post('/api/message', _this.queryData)
                 .then((response) => {
-
+                    console.log(response);
+                    _this.data = response.data;
                 })
                 .catch(function(response) {
                     console.log("获取消息失败");
@@ -141,7 +142,7 @@ import util from '../libs/util.js'
                 console.log('API GET', status);
                 this.$Modal.info({
                     title: 'Message Info',
-                    content: `FromUserId:&nbsp;&nbsp;${this.data[index].fromUserId}<br>ToUserId:&nbsp;&nbsp;${this.data[index].toUserId}<p>Text:&nbsp;&nbsp;${this.data[index].text}</p>`
+                    content: `<li>FromUserId:&nbsp;&nbsp;${this.data[index].fromUserId}</li><br><li>ToUserId:&nbsp;&nbsp;${this.data[index].toUserId}</li><br><p>Text:&nbsp;&nbsp;${this.data[index].text}</p>`
                 })
                 this.data[index].status = 1;  
                 console.log('API mesage Update: ', this.data[index].status, 'Id:', this.data[index].id);
@@ -151,7 +152,8 @@ import util from '../libs/util.js'
                 this.data.splice(index, 1);
             }
         },
-        ready: function() {
+        created: function() {
+            console.log('Create');
             this.getMessages();
         },
     }

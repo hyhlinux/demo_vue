@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'msg', include('msg.urls')),
+    url(r'api/msg', include('msg.urls')),
     url(r'^admin/', admin.site.urls),
 ]

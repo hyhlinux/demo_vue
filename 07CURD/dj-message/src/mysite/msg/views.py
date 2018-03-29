@@ -1,9 +1,15 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
-
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views import generic
+from .models import Message
 # API Message CURD
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the msg index.")
+class IndexView(generic.ListView):
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Message.objects.order_by('-createAt')[:5]
+

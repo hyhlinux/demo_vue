@@ -11,3 +11,6 @@ class Message(models.Model):
     isDelete = models.BooleanField(default=False)
     createAt = models.DateTimeField(auto_now_add=True)
     updateAt = models.DateTimeField(default=datetime.datetime.now)
+
+    def __str__(self):
+        return self.title

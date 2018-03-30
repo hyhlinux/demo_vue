@@ -31,12 +31,13 @@ import util from '../libs/util.js'
                                         type: 'person'
                                     }
                                 }),
-                                h('strong', params.row.fromUserId)
+                                h('strong', params.row.toUserId)
                             ]);
                         }
                     },
                     {
                         title: 'Status',
+                        sortable: true,
                         key: 'status',
                         render: (h, params) => {
                             return h('div', [

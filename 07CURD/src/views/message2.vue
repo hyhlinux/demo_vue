@@ -112,15 +112,6 @@ import util from '../libs/util.js'
                         text: "欢迎成为开发， xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                         date: '2016-10-04 10:23:21'
                     },
-                     {
-                        id: 2,
-                        fromUserId: '000',
-                        toUserId: '002',
-                        status: 0,
-                        title: "欢迎成为开发者",
-                        text: "欢迎成为开发， xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                        date: '2016-10-03 10:22:23'
-                    },
                 ]
             }
         },
@@ -128,7 +119,7 @@ import util from '../libs/util.js'
             getMessages() {
                 console.log("API GET Message list");
                 let _this = this;
-                util.ajax.post('/api/message', _this.queryData)
+                util.ajax.get('/v1/api/toUserId/')
                 .then((response) => {
                     console.log(response);
                     _this.data = response.data;

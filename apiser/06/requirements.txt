@@ -1,6 +1,6 @@
 aiocache==0.8.0
 aiofiles==0.3.2
-aiohttp==3.0.6
+aiohttp==3.7.4
 aiomcache==0.6.0
 aioredis==1.1.0
 arrow==0.12.1

@@ -11,7 +11,7 @@ hiredis==0.2.0
 hpack==3.0.0
 httptools==0.0.10
 hyperframe==5.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 multidict==4.1.0
 protobuf==3.5.2

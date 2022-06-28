@@ -3,7 +3,7 @@ aiofiles==0.3.2
 aiohttp==3.0.6
 aiomcache==0.6.0
 aioredis==1.1.0
-arrow==0.12.1
+arrow==0.15.1
 async-timeout==2.0.0
 asyncio-redis==0.14.3
 attrs==17.4.0

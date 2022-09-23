@@ -14,7 +14,7 @@ hyperframe==5.1.0
 Jinja2==2.10
 MarkupSafe==1.0
 multidict==4.1.0
-protobuf==3.5.2
+protobuf==3.18.3
 sanic==0.7.0
 Sanic-Cors==0.9.3
 Sanic-Plugins-Framework==0.5.2.dev20180201

@@ -8,7 +8,7 @@ async-timeout==2.0.0
 asyncio-redis==0.14.3
 attrs==17.4.0
 cchardet==2.1.1
-certifi==2018.1.18
+certifi==2022.12.7
 chardet==3.0.4
 feedparser==5.2.1
 grpcio==1.10.0
